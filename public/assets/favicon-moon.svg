@@ -1,0 +1,5 @@
+<!-- public/assets/favicon-moon.svg — Ivory crescent moon on a black browser-icon tile. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#000"/>
+  <path d="M45 12a24 24 0 1 0 7 32A23 23 0 0 1 45 12Z" fill="#f5f2e9"/>
+</svg>

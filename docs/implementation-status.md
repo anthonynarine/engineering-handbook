@@ -189,3 +189,7 @@ The release pipeline audits dependencies, validates/builds, records the Git revi
 Renderer changes explicitly skip raw HTML, restrict link schemes, block external Markdown images and reject Mermaid configuration directives/oversized input. Security regression checks exercise hostile content, delivered headers, inline-script blocking, artifact tampering and malformed/oversized browser storage. Existing inline SVG styles remain an explicit CSP exception. Automated scans detect selected secret/operational patterns and do not replace editorial review.
 
 Final executed release evidence is recorded in ignored `.release/verified.json` after the complete clean-candidate gate. No remote repository is created/pushed, account MFA settings changed, or old deployment history deleted by this source update. See docs/publication-review.md for promotion boundaries and historical-publication limits.
+
+### Moon browser icon — October 14, 2026
+
+Added an ivory crescent moon on a black SVG tile as the browser favicon and changed browser theme chrome to black. The icon is a local static asset; it requires no external image service or script. Release verification follows the existing guarded pipeline.
