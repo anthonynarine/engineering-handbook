@@ -1,0 +1,41 @@
+<!-- docs/deployment.md — Prepare static hosting without provisioning infrastructure. -->
+# Static deployment
+
+Run `npm ci` and `npm run build`; publish `dist/` with an SPA fallback to `index.html`. The handbook can be public. Published the initial four-guide preview on the existing Netlify account: https://anthony-narine-engineering-handbook.netlify.app .
+
+Site ID: `4328cb47-ee6a-4f9d-88b1-b0871acb77d5`. Initial deploy: `6acd0349d4209da2ced49636`. `netlify.toml` configures the build, static output, Node 22, and SPA fallback. This is a manual deployment; automatic GitHub deployment is not configured.
+
+For future updates, run `npm run build` then `netlify deploy --site 4328cb47-ee6a-4f9d-88b1-b0871acb77d5 --dir dist --no-build --prod`.
+
+Verify a direct article URL, a refresh on that URL, back/forward navigation, asset responses, and search after deployment. Only generated frontend content is shipped. Review article text before public release; repository privacy does not control deployment audience.
+
+Optional private hosting should restrict HTML, assets, and search at the host. Do not implement a client-side login as a substitute.
+
+Latest expanded deployment: `6acd0b70bdb0aa04ae5a486c` (2026-10-12). Production Chrome checks verify all diagrams, search and mobile navigation under the actual CSP. Security headers were confirmed in HTTP responses. This publication remains a manual Netlify release, not a Foundry-governed release.
+
+Latest EstateIQ design/content deployment: `6acd79ea515ce9c6cd0ed80c`. Nineteen guides; live browser checks passed across all diagram destinations and theme controls.
+
+## Reports walkthrough deployment — 2026-10-12
+
+Published the verified static build containing 25 guides and the `/lab/reports` synthetic browser exercise. Netlify production deploy: `6acd8d2c579b3fffb02dc416`.
+
+Walkthrough: https://anthony-narine-engineering-handbook.netlify.app/guide/reports-contract
+Lab: https://anthony-narine-engineering-handbook.netlify.app/lab/reports
+
+No backend, worker, scheduler, database, or authentication service was deployed. Backend tutorial examples remain reference code. Publication used the existing manual Netlify deployment flow.
+
+Post-deploy verification: the full Chrome suite passed against the production URL, including all diagrams, search, mobile navigation, theme controls, and the Reports lab scenarios.
+
+## Incident drill deployment — 2026-10-13
+
+Published 29 guides and `/lab/resilience` as production deploy `6ace21c952a0ce5bbc674024`. The full Chrome suite passed against the live site, including new drills, note downloads, diagrams, the Reports lab, search, and mobile/theme behavior. No backend, worker, restore, or provider operation was deployed or tested.
+
+## Foundry tutorial deployment — 2026-10-13
+
+Published 37 guides including the eight-chapter Foundry from zero path as production deploy `6ace2f90bcc78227ac6e52c6`.
+
+Entry: https://anthony-narine-engineering-handbook.netlify.app/guide/foundry-repository
+
+This publishes tutorial assets only. It does not create the demo GitHub repository, install tools on readers' machines, register owner principals, publish private Foundry code, or execute a signed task/release. Those steps are explicitly explained as reader/owner operations with verification checkpoints.
+
+Post-deploy verification: the complete Chrome suite passed on the production URL. Tutorial navigation checks wait for the actual article, avoiding a similarly named homepage-card heading. Clipboard, diagrams, interactive labs, and mobile flows passed.

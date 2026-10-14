@@ -1,0 +1,101 @@
+{
+  "gaming": {
+    "repository": "tic_tac_toe",
+    "revision": "eb50493",
+    "reviewed": "2026-10-13"
+  },
+  "estateiq": {
+    "repository": "EstateIQ",
+    "revision": "57b3ebe",
+    "reviewed": "2026-10-13",
+    "files": [
+      "backend/shared/auth/permissions.py",
+      "backend/shared/tenancy/middleware.py",
+      "backend/apps/document_intake/services/expense_draft_confirmation_service.py",
+      "backend/apps/documents/views/document_file_views.py",
+      "backend/apps/ai_copilot/routing/analyst_router.py",
+      "frontend/src/features/tenancy/context/OrgProvider.tsx",
+      "backend/Procfile"
+    ],
+    "fingerprint": "c0fdc8516354d98a710613827531acbed1d7984d28db4795aebcd5dd7cc6447b"
+  },
+  "authflow": {
+    "repository": "AuthFlow",
+    "revision": "e9a655f",
+    "reviewed": "2026-10-13",
+    "files": [
+      "react-auth/src/App.js",
+      "react-auth/src/interceptors/axios.js",
+      "react-auth/src/interceptors/tokenStorage.js",
+      "react-auth/src/interceptors/refreshCoordinator.js",
+      "react-auth/src/hooks/useBasicAuth.jsx",
+      "react-auth/src/hooks/useTwoFactorAuth.jsx",
+      "react-auth/src/docs/featureStatus.js"
+    ],
+    "fingerprint": "1a30ff512d23a6534028c4e05085f0bbea00c3838b5b7e90f27c935f86d2ce01"
+  },
+  "sdk": {
+    "repository": "gait-sdk",
+    "revision": "64d6d62",
+    "reviewed": "2026-10-13",
+    "files": [
+      "README.md",
+      "docs/ARCHITECTURE.md",
+      "gait_sdk/django/authentication.py",
+      "gait_sdk/verification.py",
+      "gait_sdk/security.py"
+    ],
+    "fingerprint": "56cd39a3c7f8963d0ebe9161e78ae866b40f0ced4c085fab6003eba725e0965b"
+  },
+  "gait": {
+    "repository": "django_auth",
+    "revision": "a6a9a36",
+    "reviewed": "2026-10-13",
+    "files": [
+      "README.md",
+      "user/auth_token.py",
+      "user/token_audiences.py",
+      "user/refresh_cookie.py",
+      "user/refresh_tokens.py",
+      "user/session_selectors.py",
+      "security/tenant_ingestion.py",
+      "docs/public/HOW_IT_WORKS.md",
+      "docs/public/GAIT_SDK.md"
+    ],
+    "fingerprint": "ebc77c59c80e4a20c3ee67698a3b8ec1b96d0f8ad7767ed2df18f8d9670b9d34"
+  },
+  "foundry": {
+    "repository": "foundry",
+    "revision": "713e176",
+    "reviewed": "2026-10-13",
+    "files": [
+      "README.md",
+      "src/foundry/state/activity.py",
+      "src/foundry/state/recovery.py",
+      "src/foundry/providers/catalog.py",
+      "src/foundry/observe/events.py",
+      "src/foundry/observe/store.py"
+    ],
+    "fingerprint": "cebe751880df9bd9450181b9f0b71a78611af95a1c9bd74b0c14cf3f913f5c32"
+  },
+  "lumen": {
+    "repository": "Lumen",
+    "revision": "a30467f",
+    "reviewed": "2026-10-13",
+    "files": [
+      "README.md",
+      "deploy/nginx/snippets/locations.conf",
+      "deploy/init/db-init.sh",
+      "lumen_reports/lumen_core/urls.py",
+      "lumen_reports/lumen_core/health.py",
+      "lumen_reports/organizations/middleware.py",
+      "lumen_reports/organizations/permissions.py",
+      "lumen_media/app/core/authorization.py",
+      "lumen_media/app/core/auth_integration_fastapi.py",
+      "lumen_media/app/routes/image_routes.py",
+      "lumen_media/app/main.py",
+      "lumen_ui/src/api/examApi.ts"
+    ],
+    "fingerprint": "d7a10ec87aae55dc13df00c854ac2431cd673b3da589a671e1d2dd1e1febfcf3"
+  }
+}

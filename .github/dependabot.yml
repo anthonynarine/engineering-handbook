@@ -1,0 +1,11 @@
+# .github/dependabot.yml — Review dependency and pinned workflow updates weekly.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

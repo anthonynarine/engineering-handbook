@@ -1,0 +1,25 @@
+<!-- reference_sources/projects-inspection.md — Public-safe record of read-only project architecture inspection. -->
+# Project architecture inspection — 2026-10-13
+
+Read-only review of local source; no project servers, migrations, backend tests, signing operations or deployments were run. Commit identifiers describe the checked-out revision, not uncommitted changes or production state. No environment files, databases, logs, credentials, private plans, security triage or signing keys were opened. Descriptions are authored summaries, not copies of source documentation.
+
+- Gaming platform (`tic_tac_toe`), HEAD eb50493: CLAUDE.md, AGENTS.md, React package, game registry, ASGI router and JWT middleware, poker routing/consumers/per-viewer serializer, tournament channel and lifecycle service, MTT views, AI view/chain, browser token store, Procfile. Five game domains are present; shared invite registry covers four multiplayer games. Runtime scheduling constraints and permission boundaries require application-specific verification. Detailed security findings are not published here. Historical load-test numbers in project notes were not rerun and are not treated as current certification.
+- AuthFlow, HEAD e9a655f: README compared against current App.js routes, interceptors/axios.js, tokenStorage.js and docs/featureStatus.js. Current implementation supersedes the README's older browser-token-storage description. Console workspaces, application setup, findings and members coexist with operator-only pages. Feature status snapshot is dated 2026-09-28; it labels product sign-in and check packs early access. No current live-service availability claim is made here.
+- gait-sdk, HEAD 64d6d62: README, docs/ARCHITECTURE.md, gait_sdk/security.py and module inventory. Separate user verification, live-session checks and application-authenticated signal reporting. Local JWKS mode is explicit, introspection is the README default. Self-reported signals do not become independent verification.
+- django_auth, HEAD 8ab3e1f: AGENTS.md for confidentiality boundaries, README, docs/public/README.md, user/refresh_cookie.py, security/tenant_ingestion.py. Public-safe overview of session authority, account security, workspace/application scope and evidence. Internal security findings, plans and triage excluded.
+- Foundry, HEAD 6937594: current README and native source module inventory, plus prior reference_sources/foundry-tutorial-inspection.md. Development control plane, Git-backed state, workspaces, providers, authority, evidence and release. Native and legacy repository layouts have different enforcement boundaries; no governed release or new runtime test performed in this review.
+- EstateIQ: previous reference_sources/estateiq-inspection.md supports existing case-study chapters. No new production audit implied.
+
+## Handbook enhancement and freshness comparison
+
+The six case-study summaries, decision rationale and recovery walkthroughs interpret the inspections above; they do not add a production audit. Five responsibility-lane diagrams complement the original detailed flows. Recovery checks remain proposed.
+
+A later local Git-metadata comparison observed tracked edits in AuthFlow, current django_auth HEAD a6a9a36, current Foundry HEAD 61710d8, and an EstateIQ checkout at 57b3ebe without an earlier recorded baseline. Those revisions were not newly source-reviewed by this enhancement. Inspected dates/revisions remain unchanged and the UI marks review due. The comparison ignores untracked files and matching HEAD alone is not a complete source snapshot or verification claim.
+
+## Targeted source refresh — 2026-10-13
+
+Recorded explicit inspected-file fingerprints in sourceReviews.json for EstateIQ (57b3ebe, seven files), AuthFlow (e9a655f, seven), SDK (64d6d62, five), Gait (a6a9a36, nine) and Foundry (713e176, six). Earlier notes above remain historical. Scope lists in the manifest define exactly what was fingerprinted; these are not whole-checkout attestations. Tracked changes outside the scope remain visible in the comparison UI. Gaming retains its earlier revision-only comparison.
+
+EstateIQ confirms selection versus active membership, scoped draft confirmation, backend-streamed document bytes and deterministic selector-backed AI routing. AuthFlow confirms in-memory access tokens, cookie transport, second-factor handling and in-tab/Web Locks refresh coordination. SDK confirms the Django adapter's 45-second successful introspection cache and the separate uncached live-session guard. Gait confirms configured origin-derived session audiences and rotating refresh state. Foundry distinguishes recorded lifecycle, assignment and sampled runtime observations; observed liveness does not prove progress or release authority.
+
+The six Gait walkthrough chapters connect these inspected boundaries. No browser credentials, actual private runtime samples, confidential security plans, issuer key state or live authentication operations were inspected. No sibling backend tests were executed. Walkthrough verification scenarios remain proposed.

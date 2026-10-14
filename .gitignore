@@ -1,0 +1,30 @@
+
+# Foundry (control-plane state and agent workspaces)
+.foundry/state/
+.foundry/work/
+.worktrees/
+
+# Frontend dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+
+# Local Netlify site linkage
+.netlify/
+
+# Private provenance, local governance, test builds and release attestations
+.private/
+.foundry/
+.security-dist/
+.release/
+*.pem
+*.key
+.DS_Store
+
+# Owner-supplied planning context is not part of the public source snapshot
+ENGINEERING_HANDBOOK_BUILD_PLAN.md

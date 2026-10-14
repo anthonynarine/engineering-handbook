@@ -1,0 +1,51 @@
+{
+  "gaming": {
+    "status": "RECORDED REVISION MATCHES",
+    "revision": "eb50493",
+    "trackedEdits": false,
+    "filesMatch": null,
+    "scopeCount": 0
+  },
+  "estateiq": {
+    "status": "INSPECTED FILES MATCH",
+    "revision": "57b3ebe",
+    "trackedEdits": false,
+    "filesMatch": true,
+    "scopeCount": 7
+  },
+  "authflow": {
+    "status": "INSPECTED FILES MATCH",
+    "revision": "e9a655f",
+    "trackedEdits": true,
+    "filesMatch": true,
+    "scopeCount": 7
+  },
+  "sdk": {
+    "status": "INSPECTED FILES MATCH",
+    "revision": "64d6d62",
+    "trackedEdits": false,
+    "filesMatch": true,
+    "scopeCount": 5
+  },
+  "gait": {
+    "status": "REVISION CHANGED",
+    "revision": "1183686",
+    "trackedEdits": false,
+    "filesMatch": true,
+    "scopeCount": 9
+  },
+  "foundry": {
+    "status": "REVISION CHANGED",
+    "revision": "b496d7c",
+    "trackedEdits": true,
+    "filesMatch": true,
+    "scopeCount": 6
+  },
+  "lumen": {
+    "status": "INSPECTED FILES MATCH",
+    "revision": "a30467f",
+    "trackedEdits": false,
+    "filesMatch": true,
+    "scopeCount": 12
+  }
+}

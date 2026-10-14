@@ -1,0 +1,4 @@
+// tests/release-integrity.mjs — Verify byte-level tampering invalidates artifact evidence.
+import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import {artifactDigest} from '../scripts/lib/artifact-digest.mjs';
+const root=fs.mkdtempSync(path.join(os.tmpdir(),'handbook-integrity-'));
+try{fs.writeFileSync(path.join(root,'index.html'),'accepted');const before=artifactDigest(root);fs.writeFileSync(path.join(root,'index.html'),'changed');assert.notEqual(artifactDigest(root),before);fs.writeFileSync(path.join(root,'index.html'),'accepted');assert.equal(artifactDigest(root),before);fs.writeFileSync(path.join(root,'extra.js'),'unexpected');assert.notEqual(artifactDigest(root),before);console.log('Artifact integrity checks passed: changed bytes and added paths invalidate evidence.');}finally{fs.rmSync(root,{recursive:true,force:true});}
