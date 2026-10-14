@@ -1,6 +1,6 @@
 import {browserOptions} from './browser-options.mjs';
 // tests/troubleshooting.mjs — Verify symptom discovery, linkable selection and truthful diagnostic notes.
-import { chromium } from '@playwright/test';
+import { chromium, expect } from '@playwright/test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 const base=process.env.HANDBOOK_TEST_URL??'http://127.0.0.1:4173';
@@ -15,7 +15,7 @@ try {
  await page.reload();await path.getByRole('heading',{name:'ALB error or unhealthy target'}).waitFor();
  await path.getByRole('button',{name:'Copy investigation notes',exact:true}).click();await path.getByRole('status').getByText('Investigation notes copied',{exact:true}).waitFor();
  const notes=await page.evaluate(()=>navigator.clipboard.readText());assert.ok(notes.includes('Unexecuted diagnostic plan'));assert.ok(notes.includes('No application, infrastructure or security checks were executed'));assert.ok(notes.includes('/guide/troubleshoot-alb'));
- await path.getByRole('link',{name:'Open the full troubleshooting guide'}).click();await page.waitForURL('**/guide/troubleshoot-alb');await page.locator('article h1').waitFor();assert.ok((await page.locator('article').innerText()).includes('planned Lumen AWS architecture'));
+ await path.getByRole('link',{name:'Open the full troubleshooting guide'}).click();await page.waitForURL('**/guide/troubleshoot-alb');await page.locator('article h1').waitFor();await expect(page.locator('article')).toContainText('planned Lumen AWS architecture');
  await page.goto(base+'/guide/troubleshooting-desk');
  await desk.getByRole('button',{name:'Security',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.diagnostic-card').length===2);
  await desk.getByRole('searchbox',{name:'What is going wrong?'}).fill('no-such-issue');await desk.getByRole('button',{name:'Clear troubleshooting filters'}).click();await page.waitForFunction(()=>document.querySelectorAll('.diagnostic-card').length===6);
