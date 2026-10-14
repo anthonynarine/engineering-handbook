@@ -3,7 +3,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 const headers=Object.fromEntries([...fs.readFileSync('netlify.toml','utf8').matchAll(/^    ([A-Za-z-]+) = "([^"]*)"$/gm)].map(([,key,value])=>[key,value]));
-const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2'};
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.woff2':'font/woff2','.ttf':'font/ttf'};
 const server=http.createServer((req,res)=>{try{
  const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);const fixture=pathname.startsWith('/__security/');const base=path.resolve(fixture?'.security-dist':'dist');const relative=fixture?pathname.slice('/__security/'.length):pathname.slice(1);let file=path.resolve(base,relative);
  if(file!==base&&!file.startsWith(base+path.sep)){res.writeHead(400);res.end();return;}

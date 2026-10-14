@@ -15,7 +15,8 @@
     "build:release": "npm audit --audit-level=high && npm run build && node scripts/write-release.mjs && npm run check:public && node scripts/check-public.mjs --dist",
     "test:release": "node tests/release-integrity.mjs && node scripts/build-security-fixture.mjs && node scripts/run-browser-checks.mjs",
     "release:prepare": "node scripts/prepare-release.mjs",
-    "release:deploy": "node scripts/deploy-release.mjs"
+    "release:deploy": "node scripts/deploy-release.mjs",
+    "check:production": "node scripts/check-production.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

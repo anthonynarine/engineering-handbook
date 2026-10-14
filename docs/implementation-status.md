@@ -193,3 +193,7 @@ Final executed release evidence is recorded in ignored `.release/verified.json` 
 ### Moon browser icon — October 14, 2026
 
 Added an ivory crescent moon on a black SVG tile as the browser favicon and changed browser theme chrome to black. The icon is a local static asset; it requires no external image service or script. Release verification follows the existing guarded pipeline.
+
+### Local fonts and live release verification — October 14, 2026
+
+Replaced Google Fonts requests with licensed local font assets and tightened CSP font/style origins. Added weekly Dependabot configuration for npm and GitHub Actions (pending repository publication). Added candidate and post-deployment smoke checks for revision, security headers, rendered routes, local assets and third-party requests. Deployment fails visibly if post-publication checks fail; it does not claim or attempt an automatic rollback. No hosting account settings or remote repository publication changed.
