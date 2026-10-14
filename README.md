@@ -49,4 +49,4 @@ Commit the reviewed source, then run `npm run release:prepare`. This audits depe
 
 CI runs the same gates on pull requests and pushes without deployment credentials. Install CI Chromium with `npx playwright install --with-deps chromium`. macOS uses installed Chrome; other environments use Playwright Chromium. `dist/release.json` identifies the deployed source revision. Test fixtures build only into ignored `.security-dist/` and are rejected from the public deployment.
 
-A local Git history is not an off-device backup. The workflow becomes active only after this repository is connected/pushed to GitHub; required checks and branch protection must be enabled there. No remote repository or promotion is created by these changes.
+A local Git history is not an off-device backup. The new workflow becomes active only after these commits are pushed to GitHub; required checks and branch protection must be enabled there. No remote repository or promotion is created by these changes.
