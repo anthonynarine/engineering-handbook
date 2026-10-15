@@ -23,7 +23,7 @@ try{
  await page.goto(base+'/guide/git-basics');await expect(page.locator('nav[aria-label="Article sequence"] a')).toHaveCount(1);await expect(page.locator('nav[aria-label="Article sequence"] a')).toHaveAttribute('href','/guide/git-command-reference');
  await page.goto(base+'/guide/foundry-first-task');await expect(page.locator('.curriculum-group[open] summary')).toHaveText('Setup tutorial');await expect(page.getByRole('navigation',{name:'Article sequence'}).getByRole('link',{name:/Next in this topic/})).toHaveAttribute('href','/guide/foundry-review-release');
  await page.goto(base+'/guide/reports-release');await expect(page.getByRole('navigation',{name:'Article sequence'}).getByRole('link')).toHaveCount(1);
- await page.goto(base+'/guide/build-recipes?category=Server');await expect(page.locator('.recipe-card')).toHaveCount(2);await expect(page.getByRole('button',{name:'Backend',exact:true})).toHaveAttribute('aria-pressed','true');
+ await page.goto(base+'/guide/build-recipes?category=Server');await expect(page.locator('.recipe-card')).toHaveCount(2);await expect(page.getByRole('group',{name:'Recipe categories'}).getByRole('button',{name:'Backend',exact:true})).toHaveAttribute('aria-pressed','true');
  await page.setViewportSize({width:390,height:844});
  for(const route of ['/','/guides','/guides?topic=operations&q=heroku']){
   await page.goto(base+route);await expect(page.locator('main h1')).toBeVisible();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),route+' overflow');
