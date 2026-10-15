@@ -10,9 +10,9 @@ try{
  const articles=JSON.parse(fs.readFileSync('src/generated/articles.json','utf8'));
  await page.goto(base+'/');
  const sidebar=page.locator('.sidebar');
- assert.equal(await sidebar.locator('button[aria-label="Server"] svg.lucide-server').count(),1);
- assert.equal(await sidebar.locator('button[aria-label="Client"] svg.lucide-monitor').count(),1);
- assert.deepEqual(await sidebar.locator('.sidebar-section-title').allTextContents(),['Start here','Foundry','Server','Client','Security','AI','Deployment & operations','Projects']);
+ assert.equal(await sidebar.locator('button[aria-label="Backend"] svg.lucide-server').count(),1);
+ assert.equal(await sidebar.locator('button[aria-label="Frontend"] svg.lucide-monitor').count(),1);
+ assert.deepEqual(await sidebar.locator('.sidebar-section-title').allTextContents(),['Start here','Foundry','Backend','Frontend','Security','AI','Cloud & CI/CD','Projects']);
  const guideHrefs=await sidebar.locator('a[href^="/guide/"]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
  const projectSlugs=new Set(articles.filter(article=>article.section==='projects').map(article=>article.slug));
  for(const article of articles.filter(article=>!projectSlugs.has(article.slug)))assert.equal(guideHrefs.filter(href=>href==='/guide/'+article.slug).length,1,article.slug+' has one sidebar home');
@@ -24,7 +24,7 @@ try{
  const foundrySection=sidebar.getByRole('button',{name:'Foundry',exact:true});
  await foundrySection.focus();await page.keyboard.press('Enter');
  assert.equal(await foundrySection.getAttribute('aria-expanded'),'true');
- assert.equal(await sidebar.locator('.sidebar-section-links:visible a').count(),articles.filter(article=>article.section==='foundry').length);
+ assert.equal(await sidebar.locator('#sidebar-section-foundry a').count(),articles.filter(article=>article.section==='foundry').length);
  await sidebar.getByRole('button',{name:'Security',exact:true}).click();
  assert.equal(await foundrySection.getAttribute('aria-expanded'),'false');
  assert.equal(await sidebar.locator('.sidebar-section-toggle[aria-expanded="true"]').count(),1);

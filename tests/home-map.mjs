@@ -15,9 +15,9 @@ try {
  const hrefs=await map.getByRole('link').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
  for(const href of hrefs)assert.ok(slugs.has(href.replace('/guide/','')),href);
  await page.locator('.diagram').first().screenshot({style:'.topbar{visibility:hidden}',path:'/private/tmp/handbook-home-map-dark.png'});
- await map.getByRole('link',{name:'Server',exact:true}).focus();await page.keyboard.press('Enter');
+ await map.getByRole('link',{name:'Backend',exact:true}).focus();await page.keyboard.press('Enter');
  await page.waitForURL('**/guide/django-toolkit');
- await page.locator('.sidebar button[aria-label="Server"][aria-expanded="true"]').waitFor();
+ await page.locator('.sidebar button[aria-label="Backend"][aria-expanded="true"]').waitFor();
  await page.goto(base+'/');
  await page.getByRole('button',{name:'Use light theme'}).click();
  await page.locator('.diagram').first().screenshot({style:'.topbar{visibility:hidden}',path:'/private/tmp/handbook-home-map-light.png'});

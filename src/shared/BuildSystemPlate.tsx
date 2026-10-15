@@ -8,7 +8,7 @@ export const buildSystemSource = `flowchart TB
     Foundry --> Agents[Agents: scoped implementation]
     Agents --> Review[Review evidence and human approval]
     Review --> Release[Build and deploy the accepted revision]
-    Release --> Client[Client: React and server-state cache]
+    Release --> Client[Frontend: React and server-state cache]
     Release --> Server[Django API: domain rules and permissions]
     Client -->|HTTPS| Server
     Server --> Data[Database and private files]
@@ -43,8 +43,8 @@ export default function BuildSystemPlate(){
  <text className="plate-edge-label" x="519" y="376">build & deploy</text>
  <rect className="plate-zone" x="24" y="392" width="952" height="310" rx="20"/>
  <text x="44" y="421" className="plate-zone-label">02 / RUN — THE APPLICATION YOU BUILD</text>
- <Card x={45} y={443} title="Client" detail="React · Axios · Query cache" href="/guide/frontend-architecture" icon={Monitor} color="teal"/>
- <Card x={370} y={443} title="Server" detail="Django · DRF · domain rules" href="/guide/django-toolkit" icon={Server} color="teal"/>
+ <Card x={45} y={443} title="Frontend" detail="React · Axios · Query cache" href="/guide/frontend-architecture" icon={Monitor} color="teal"/>
+ <Card x={370} y={443} title="Backend" detail="Django · DRF · domain rules" href="/guide/django-toolkit" icon={Server} color="teal"/>
  <Card x={695} y={443} title="Data & files" detail="PostgreSQL · private storage" href="/guide/django-models-orm" icon={Database} color="teal"/>
  {wire('M305 487H370')}{wire('M630 487H695')}
  <text className="plate-edge-label" x="337" y="473" textAnchor="middle">HTTPS</text><text className="plate-edge-label" x="662" y="473" textAnchor="middle">scoped I/O</text>
@@ -55,7 +55,7 @@ export default function BuildSystemPlate(){
  <Card x={695} y={585} title="AI integration" detail="Scoped context · safe tools" href="/guide/deterministic-ai" icon={Sparkles}/>
  <text x="44" y="735" className="plate-zone-label">03 / PROTECT & OPERATE — ACROSS THE BOUNDARIES</text>
  <Link to="/guide/security-boundaries" aria-label="Security across the system"><g className="plate-node violet"><rect x="45" y="753" width="445" height="65" rx="13"/><svg x="63" y="774" width="21" height="21" viewBox="0 0 24 24"><ShieldCheck/></svg><text className="plate-title" x="97" y="779">Security</text><text className="plate-detail" x="97" y="799">Identity · permissions · tenant isolation · browser trust</text></g></Link>
- <Link to="/guide/deployment-platforms" aria-label="Deployment and operations"><g className="plate-node neutral"><rect x="510" y="753" width="445" height="65" rx="13"/><svg x="528" y="774" width="21" height="21" viewBox="0 0 24 24"><Cloud/></svg><text className="plate-title" x="562" y="779">Deployment & operations</text><text className="plate-detail" x="562" y="799">Hosting · monitoring · backups · recovery</text></g></Link>
+ <Link to="/guide/deployment-platforms" aria-label="Cloud and CI/CD"><g className="plate-node neutral"><rect x="510" y="753" width="445" height="65" rx="13"/><svg x="528" y="774" width="21" height="21" viewBox="0 0 24 24"><Cloud/></svg><text className="plate-title" x="562" y="779">Cloud & CI/CD</text><text className="plate-detail" x="562" y="799">Hosting · monitoring · backups · recovery</text></g></Link>
  <text x="44" y="849" className="plate-subheading">Reference map · Optional capabilities vary by project. This handbook itself is a static frontend.</text>
  </svg>;
 }

@@ -7,7 +7,7 @@ summary: "The starting point for my engineering manual: choose a layout, build w
 order: 0.5
 tags: [workflow, manual, structure, foundry, delivery]
 status: established-pattern
-lastReviewed: "2026-10-13"
+lastReviewed: "2026-10-15"
 sources: [reference_sources/django-toolkit.md, reference_sources/frontend-structure.md, reference_sources/projects-inspection.md]
 related: [django-toolkit, frontend-folder-structure, foundry-repository]
 ---
@@ -18,7 +18,9 @@ This is my master manual for building. The goal is a repeatable path from an ide
 
 Use the [interactive project checklist](/guide/project-starter-checklist) to track your next steps, and the [recipe directory](/guide/build-recipes) for common implementation tasks.
 
-## 1. Choose the project shape
+## 1. Establish the repository and project shape
+
+Start with [Git basics and pull requests](/guide/git-basics). Keep the [Git command reference](/guide/git-command-reference) nearby when staging, branching or reviewing a change.
 
 For a documentation site or browser-only tool, start with the [frontend structure](/guide/frontend-folder-structure). For an application with its own API, start with the [Django + React structure](/guide/full-stack-folder-structure): one repository, backend and frontend directories, three ignore files. Define what belongs to the browser and what requires server authority before choosing libraries.
 
@@ -46,7 +48,7 @@ Reference examples and completed handbook exercises are not executed application
 
 ## 6. Deploy and keep it running
 
-Choose the [deployment platform](/guide/deployment-platforms) for the processes the application needs. Configure migrations, secrets, storage and static delivery deliberately. Define [scheduled work and backups](/guide/backup-and-scheduled-tasks), then verify recovery through the [runbook](/guide/recovery-runbook).
+Choose the [deployment platform](/guide/deployment-platforms) for the processes the application needs. Use the [CI/CD map](/guide/ci-cd-release-workflow) to separate checks, approval and deployment. Follow [Django on Heroku](/guide/heroku-django-deployment) and the [Heroku operations reference](/guide/heroku-operations) when that is the selected host. Configure migrations, secrets, storage and static delivery deliberately. Define [scheduled work and backups](/guide/backup-and-scheduled-tasks), then verify recovery through the [runbook](/guide/recovery-runbook).
 
 ## 7. Feed real experience back into the manual
 
@@ -64,6 +66,6 @@ Define [API contracts](/guide/api-contracts), plan [database changes](/guide/saf
 
 Use the [Learning roadmap](/guide/learning-roadmap) for the few skills you want to practice next. Suggested topics, self-reported learning and executed project evidence remain separate.
 
-## Git and deployment field guides
+## Find a specific answer
 
-Start with [Git basics and pull requests](/guide/git-basics), keep the [command reference](/guide/git-command-reference) nearby, and use [worktrees](/guide/git-worktrees) when separate tasks need separate directories. When the backend is ready, follow [Django on Heroku](/guide/heroku-django-deployment) and the [Heroku operations reference](/guide/heroku-operations).
+Open [All guides](/guides) to search a command or filter by topic. The sidebar follows the same topic names; previous and next links stay within your current topic or project. Use [Git worktrees](/guide/git-worktrees) when separate Foundry tasks need separate directories.

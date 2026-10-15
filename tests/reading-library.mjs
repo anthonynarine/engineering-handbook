@@ -7,8 +7,8 @@ const browser=await chromium.launch(browserOptions());
 try {
  const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(base+'/guide/api-contracts');
- assert.equal(await page.locator('.sidebar button[aria-label="Server"] svg.lucide-server').count(),1);
- assert.equal(await page.locator('.sidebar button[aria-label="Client"] svg.lucide-monitor').count(),1);
+ assert.equal(await page.locator('.sidebar button[aria-label="Backend"] svg.lucide-server').count(),1);
+ assert.equal(await page.locator('.sidebar button[aria-label="Frontend"] svg.lucide-monitor').count(),1);
  await page.getByRole('button',{name:'Save guide',exact:true}).click();await page.getByRole('button',{name:'Remove bookmark',exact:true}).waitFor();await page.reload();await page.getByRole('button',{name:'Remove bookmark',exact:true}).waitFor();
  await page.goto(base+'/guide/testing-strategy');await page.locator('article h1').waitFor();await page.locator('.article-bookmark').getByRole('link').click();await page.waitForURL('**/guide/my-library');
  const saved=page.getByRole('region',{name:'Saved guides',exact:true});const recent=page.getByRole('region',{name:'Recently viewed',exact:true});

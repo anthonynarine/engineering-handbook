@@ -18,12 +18,12 @@ try{
  page.on('request',request=>{if(new URL(request.url()).origin!==base.origin)external.push(request.url());});
  const response=await page.request.get(new URL('/release.json',base).href,{headers:{'Cache-Control':'no-cache'}});
  assert.equal(response.status(),200);assert.equal((await response.json()).revision,revision,'Production revision differs from verified candidate');
- for(const route of ['/','/guide/build-manual','/guide/lumen-aws-architecture']){
+ for(const route of ['/','/guides','/guide/build-manual','/guide/lumen-aws-architecture']){
   const result=await page.goto(new URL(route,base).href);assert.equal(result.status(),200,route);
   for(const [header,value] of Object.entries(expectedHeaders))assert.equal(result.headers()[header],value,`${route}: ${header}`);
   if(base.protocol==='https:')assert.match(result.headers()['strict-transport-security']??'',/max-age=[1-9]\d*/);
   await expect(page.locator('main h1')).toBeVisible();
-  if(route!=='/'){
+  if(route.startsWith('/guide/')){
    await expect(page.locator('article')).toBeVisible();
    const article=JSON.parse(fs.readFileSync('src/generated/articles.json','utf8')).find(article=>route===`/guide/${article.slug}`);
    assert.ok(article,`Unknown smoke route: ${route}`);await expect(page.locator('main h1')).toHaveText(article.title);
@@ -38,5 +38,5 @@ try{
   assert.deepEqual(Buffer.from(await result.body()),fs.readFileSync(`dist${asset}`),`${asset}: differs from verified build`);
  }
  assert.deepEqual(external,[],'Unexpected third-party browser requests');assert.deepEqual(errors,[],'Browser errors');
- console.log(`Smoke checks passed: ${revision}, 3 rendered routes, configured headers, local fonts and favicon, no third-party requests.`);
+ console.log(`Smoke checks passed: ${revision}, 4 rendered routes, configured headers, local fonts and favicon, no third-party requests.`);
 }finally{await browser.close();}

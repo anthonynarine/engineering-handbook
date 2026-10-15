@@ -29,7 +29,7 @@ try {
  await checklist.getByRole('radio',{name:'Full-stack Django API and React'}).click();await page.waitForFunction(()=>document.querySelectorAll('.build-step input[type=checkbox]').length===12);assert.equal(await checklist.getByRole('checkbox').first().isChecked(),true);
  await page.goto(base+'/guide/build-recipes');
  const recipes=page.getByRole('region',{name:'Build recipe directory'});await recipes.locator('.recipe-card').first().waitFor();assert.equal(await recipes.locator('.recipe-card').count(),6);
- await recipes.getByRole('button',{name:'Server',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.recipe-card').length===2);
+ await recipes.getByRole('button',{name:'Backend',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.recipe-card').length===2);
  await recipes.getByRole('searchbox',{name:'Find a task'}).fill('websocket');await recipes.getByRole('button',{name:'Clear recipe filters'}).waitFor();
  await recipes.getByRole('button',{name:'Clear recipe filters'}).click();await page.waitForFunction(()=>document.querySelectorAll('.recipe-card').length===6);
  await recipes.getByRole('searchbox',{name:'Find a task'}).fill('websocket');await page.waitForFunction(()=>document.querySelectorAll('.recipe-card').length===1);await page.reload();assert.equal(await recipes.locator('.recipe-card').count(),1);
