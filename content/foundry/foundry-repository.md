@@ -9,7 +9,7 @@ tags: [foundry, tutorial, setup, github, repository, agents]
 status: established-pattern
 lastReviewed: "2026-10-13"
 sources: [reference_sources/foundry-tutorial-inspection.md, reference_sources/foundry-inspection.md]
-related: [building-with-foundry, foundry-installation]
+related: [building-with-foundry, foundry-installation, git-basics, git-worktrees]
 ---
 
 ## What you will build

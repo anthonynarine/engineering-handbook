@@ -9,7 +9,7 @@ tags: [deployment, heroku, vercel, netlify, aws, s3, storage]
 status: established-pattern
 lastReviewed: "2026-10-12"
 sources: [reference_sources/stack-context.md]
-related: [backup-and-scheduled-tasks, authentication-options, system-overview]
+related: [backup-and-scheduled-tasks, authentication-options, system-overview, heroku-django-deployment, heroku-operations]
 ---
 
 ## Start with the platforms I actually use

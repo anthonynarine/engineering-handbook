@@ -10,7 +10,7 @@ const serverGroups = [
 export default function SectionNavigation({section,slug}:{section:string;slug?:string}) {
  const guides=articles.filter(article=>navigationSection(article)===section);
  const recipeGroup={name:'Build recipes',slugs:guides.filter(article=>article.slug.startsWith('recipe-')).map(article=>article.slug)};
- const baseGroups=section==='server'?[...serverGroups,recipeGroup]:section==='client'||section==='security'?[recipeGroup]:section==='start'?[{name:'Build a complete feature',slugs:guides.filter(article=>article.section==='walkthrough').map(article=>article.slug)}]:[];
+ const baseGroups=section==='server'?[...serverGroups,recipeGroup]:section==='client'||section==='security'?[recipeGroup]:section==='start'?[{name:'Git essentials',slugs:['git-basics','git-command-reference']},{name:'Build a complete feature',slugs:guides.filter(article=>article.section==='walkthrough').map(article=>article.slug)}]:section==='operations'?[{name:'Heroku field guide',slugs:['heroku-django-deployment','heroku-operations']}]:[];
  const diagnosticGroup={name:'Troubleshooting',slugs:guides.filter(article=>article.slug.startsWith('troubleshoot-')).map(article=>article.slug)};
  const groups=diagnosticGroup.slugs.length?[...baseGroups,diagnosticGroup]:baseGroups;
  const grouped=new Set(groups.flatMap(group=>group.slugs));

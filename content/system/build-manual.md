@@ -63,3 +63,7 @@ Define [API contracts](/guide/api-contracts), plan [database changes](/guide/saf
 ## Keep learning deliberately
 
 Use the [Learning roadmap](/guide/learning-roadmap) for the few skills you want to practice next. Suggested topics, self-reported learning and executed project evidence remain separate.
+
+## Git and deployment field guides
+
+Start with [Git basics and pull requests](/guide/git-basics), keep the [command reference](/guide/git-command-reference) nearby, and use [worktrees](/guide/git-worktrees) when separate tasks need separate directories. When the backend is ready, follow [Django on Heroku](/guide/heroku-django-deployment) and the [Heroku operations reference](/guide/heroku-operations).

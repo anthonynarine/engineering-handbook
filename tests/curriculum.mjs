@@ -36,11 +36,19 @@ try {
  await page.locator('.diagram-canvas svg').first().waitFor();
  assert.equal(await page.locator('.diagram [role="alert"]').count(),0);
  await page.setViewportSize({width:390,height:844});
- for(const slug of ['build-manual','django-toolkit','django-first-api','django-middleware','django-cors','websocket-design','django-channels','full-stack-folder-structure','frontend-folder-structure','react-api-connection','gait-auth-walkthrough']){
+ for(const slug of ['build-manual','django-toolkit','django-first-api','django-middleware','django-cors','websocket-design','django-channels','full-stack-folder-structure','frontend-folder-structure','react-api-connection','gait-auth-walkthrough','git-basics','git-command-reference','git-worktrees','heroku-django-deployment','heroku-operations']){
   await page.goto(base+'/guide/'+slug);await page.locator('article h1').waitFor();
   await page.waitForTimeout(100);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),slug+' mobile overflow');
  }
+ await page.setViewportSize({width:1440,height:1000});
+ for(const [slug,label] of [['git-basics','Git essentials'],['heroku-operations','Heroku field guide']]){
+  await page.goto(base+'/guide/'+slug);await page.locator('article h1').waitFor();
+  const group=page.locator('.curriculum-group').filter({has:page.locator('summary',{hasText:label})});
+  await group.locator('a[aria-current="page"]').waitFor();assert.equal(await group.getAttribute('open'),'');
+  await group.locator('summary').focus();await page.keyboard.press('Enter');assert.equal(await group.getAttribute('open'),null);
+ }
+ await page.setViewportSize({width:390,height:844});
  await page.goto(base+'/guide/django-channels');
  await page.getByRole('button',{name:'Toggle navigation'}).click();
  await page.locator('.sidebar.open .curriculum-group a[aria-current="page"]').waitFor();

@@ -1,0 +1,10 @@
+<!-- Public primary-source review notes; no provider or GitHub operations were executed. -->
+# Git and Heroku reference review
+
+Reviewed October 15, 2026. These guides teach workflows; they do not report a new Heroku deployment, signed Foundry task, backup, restore, or remote repository publication. Commands use placeholders and require the reader's own project setup. Existing search indexes every guide and its command text.
+
+Git sources: [tutorial](https://git-scm.com/docs/gittutorial), [command index](https://git-scm.com/docs), [merge](https://git-scm.com/docs/git-merge), [restore](https://git-scm.com/docs/git-restore), [revert](https://git-scm.com/docs/git-revert), [stash](https://git-scm.com/docs/git-stash), [reflog](https://git-scm.com/docs/git-reflog), [worktree](https://git-scm.com/docs/git-worktree), and [subtree manual](https://github.com/git/git/blob/master/contrib/subtree/git-subtree.adoc). GitHub's [PR guide](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request) supplies the collaboration steps.
+
+Heroku sources: [Python start](https://devcenter.heroku.com/articles/getting-started-with-python), [Django configuration](https://devcenter.heroku.com/articles/django-app-configuration), [static assets](https://devcenter.heroku.com/articles/django-assets), [release phase](https://devcenter.heroku.com/articles/release-phase), [CLI commands](https://devcenter.heroku.com/articles/heroku-cli-commands), [Scheduler](https://devcenter.heroku.com/articles/scheduler), [PGBackups](https://devcenter.heroku.com/articles/heroku-postgres-backups), and [releases and rollback](https://devcenter.heroku.com/articles/releases). Modern static storage configuration follows [WhiteNoise's Django integration](https://whitenoise.readthedocs.io/en/stable/django.html).
+
+Plan features and runtime support can change. PGBackups is not available on every Postgres offering; production recovery should evaluate the provider's continuous-protection options as well. The field guide deliberately avoids fixed prices, plan identifiers, production restore commands, embedded credentials, or promises of exactly-once scheduling.

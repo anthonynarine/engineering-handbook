@@ -197,3 +197,7 @@ Added an ivory crescent moon on a black SVG tile as the browser favicon and chan
 ### Local fonts and live release verification — October 14, 2026
 
 Replaced Google Fonts requests with licensed local font assets and tightened CSP font/style origins. Added weekly Dependabot configuration for npm and GitHub Actions (pending repository publication). Added candidate and post-deployment smoke checks for revision, security headers, rendered routes, local assets and third-party requests. Deployment fails visibly if post-publication checks fail; it does not claim or attempt an automatic rollback. No hosting account settings or remote repository publication changed.
+
+### Final Git and Heroku field guides — October 15, 2026
+
+Added Git repository-to-PR steps, a searchable command reference, task worktrees connected to Foundry, Django-on-Heroku deployment and Heroku operations. Git essentials and Heroku field guide use sidebar dropdowns, with entry links from the build workflow and existing Foundry/hosting guides. Official documentation reviewed; these are reference instructions, not claims that Heroku resources, GitHub PRs, backups or Foundry tasks were executed. Final release checks validate the content and navigation before the existing guarded Netlify publication.
