@@ -213,3 +213,7 @@ Added a local SVG graph containing every guide node, eight section hubs, section
 ### Cursor-responsive graph motion — October 15, 2026
 
 Guide nodes now react to pointer movement with a local repulsion field and damped spring return, while the hovered guide stays steady for selection. Nearby nodes and connections brighten; guide nodes emit hover rings and section hubs breathe on hover. The pointer field respects the graph's pan/zoom transform. Keyboard focus still pauses the layout, and reduced-motion/mobile behavior remains static. Added browser assertions for substantial neighboring-node displacement and a steady, clickable hovered target.
+
+### Readable guide titles and forgiving node acquisition — October 15, 2026
+
+Expanded guide hit areas and added screen-space proximity capture: approaching within 44 pixels freezes the nearest guide, with a wider 76-pixel retention zone so it does not escape while the pointer moves. A deliberate close approach to another dot can switch targets. A fixed full-title preview offers select/open actions, selected nodes remain pinned, and SVG titles wrap rather than truncate. Background dragging still pans; a click in a capture zone selects its guide. Motion remains on neighboring nodes and reduced-motion/mobile alternatives remain available. Browser checks exercise acquisition outside the dot, retention, full titles, preview selection and persistence after leaving.

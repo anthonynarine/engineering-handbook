@@ -19,6 +19,14 @@ try{
  await expect(neuron).toHaveAttribute('transform',held);await expect(graph.locator('.graph-note.is-near')).not.toHaveCount(0);
  await neuron.locator('.graph-hit').click();await expect(inspector.getByRole('heading',{level:3})).toHaveText(articles[0].title);
  await page.mouse.move(0,0);
+
+ const outer=graph.locator('[data-guide="ai-evaluation-and-fallbacks"]');await outer.focus();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const dot=await outer.locator('.graph-hit').boundingBox();const lockedPosition=await outer.getAttribute('transform');
+ await page.mouse.move(dot.x+dot.width/2-36,dot.y+dot.height/2);
+ const preview=map.locator('.graph-preview');await expect(preview.locator('strong')).toHaveText(articles.find(article=>article.slug==='ai-evaluation-and-fallbacks').title);
+ await page.mouse.move(dot.x+dot.width/2-60,dot.y+dot.height/2);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);await expect(preview).toBeVisible();await map.screenshot({path:'/private/tmp/handbook-node-lock-preview.png'});
+ await preview.getByRole('button',{name:'Select guide'}).click();await expect(inspector.getByRole('heading',{level:3})).toHaveText(articles.find(article=>article.slug==='ai-evaluation-and-fallbacks').title);
+ await page.mouse.move(0,0);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);
  await graph.getByRole('button',{name:'Explore section: Backend',exact:true}).focus();await page.keyboard.press('Enter');await expect(inspector.getByRole('heading',{level:3})).toHaveText('Backend');await expect(inspector.getByRole('link',{name:'Start here'})).toHaveAttribute('href','/guide/django-toolkit');
  await graph.getByRole('button',{name:'Explore guide: Git command reference',exact:true}).focus();await page.keyboard.press('Enter');await expect(inspector.getByRole('heading',{level:3})).toHaveText('Git command reference');await expect(graph.locator('.graph-edges .is-related')).not.toHaveCount(0);await expect(inspector.getByRole('link',{name:'Open this guide'})).toHaveAttribute('href','/guide/git-command-reference');
  await map.getByRole('button',{name:'Zoom in knowledge graph',exact:true}).click();await expect(map.getByLabel('Knowledge graph zoom')).toHaveText('120%');
@@ -32,5 +40,5 @@ try{
  await map.getByRole('navigation',{name:'Knowledge graph sections'}).getByRole('button',{name:/Cloud & CI\/CD/}).click();await expect(inspector.getByRole('heading',{level:3})).toHaveText('Cloud & CI/CD');
  await expect(inspector.getByRole('link',{name:'CI/CD: checks, review, release',exact:true})).toBeVisible();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await map.screenshot({path:'/private/tmp/handbook-knowledge-graph-mobile.png'});await inspector.getByRole('link',{name:'Start here'}).click();await expect(page.locator('article h1')).toHaveText('CI/CD: checks, review, release');
- assert.deepEqual(errors,[]);console.log('Knowledge graph passed: every guide/section, animated layout, cursor repulsion with stable click targets, keyboard selection, related links, zoom, drag/reset, themes, reduced motion and mobile list navigation.');
+ assert.deepEqual(errors,[]);console.log('Knowledge graph passed: every guide/section, animated layout, cursor repulsion, proximity lock, full titles, retention and pinned selection, keyboard selection, related links, zoom, drag/reset, themes, reduced motion and mobile list navigation.');
 }finally{await browser.close();}
