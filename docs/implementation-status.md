@@ -209,3 +209,7 @@ Renamed sidebar topics to Backend, Frontend, and Cloud & CI/CD, keeping existing
 ### Connected knowledge landing page — October 15, 2026
 
 Added a local SVG graph containing every guide node, eight section hubs, section membership edges and deduplicated recorded related-guide links. Selecting a section or guide updates an inspector with real guide destinations and highlights connections. The layout settles gently and drifts; hover/keyboard interaction pauses motion. Controls provide bounded zoom, background drag and reset. Reduced-motion preferences use fixed positions, and small screens use section buttons and the same guide inspector/list with no running graph animation. Existing search, directory, build actions, reading path and system-design diagram remain available. No graph service, telemetry, dependency, AI or voice integration was introduced. Focused browser checks cover node coverage, keyboard selection, navigation, drag/reset, themes, motion preferences and mobile access.
+
+### Cursor-responsive graph motion — October 15, 2026
+
+Guide nodes now react to pointer movement with a local repulsion field and damped spring return, while the hovered guide stays steady for selection. Nearby nodes and connections brighten; guide nodes emit hover rings and section hubs breathe on hover. The pointer field respects the graph's pan/zoom transform. Keyboard focus still pauses the layout, and reduced-motion/mobile behavior remains static. Added browser assertions for substantial neighboring-node displacement and a steady, clickable hovered target.
