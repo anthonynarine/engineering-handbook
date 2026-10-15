@@ -22,6 +22,7 @@ try{
 
  const outer=graph.locator('[data-guide="ai-evaluation-and-fallbacks"]');await outer.focus();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const dot=await outer.locator('.graph-hit').boundingBox();const lockedPosition=await outer.getAttribute('transform');
+ await page.mouse.move(dot.x+dot.width/2-90,dot.y+dot.height/2);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);
  await page.mouse.move(dot.x+dot.width/2-36,dot.y+dot.height/2);
  const preview=map.locator('.graph-preview');await expect(preview.locator('strong')).toHaveText(articles.find(article=>article.slug==='ai-evaluation-and-fallbacks').title);
  await page.mouse.move(dot.x+dot.width/2-60,dot.y+dot.height/2);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);await expect(preview).toBeVisible();await map.screenshot({path:'/private/tmp/handbook-node-lock-preview.png'});

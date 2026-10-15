@@ -15,13 +15,13 @@ const initial=()=>nodes.map((node,index)=>({x:node.x+Math.cos(index*2.4)*16,y:no
 export default function KnowledgeGraph(){
  const [section,setSection]=useState('foundry');const [selected,setSelected]=useState<string|null>(null);const [positions,setPositions]=useState(initial);
  const [view,setView]=useState({zoom:1,x:0,y:0});const drag=useRef<{x:number;y:number;originX:number;originY:number;moved:boolean;guide:string|null}|null>(null);const paused=useRef(false);
- const svg=useRef<SVGSVGElement>(null);const pinned=useRef<string|null>(null);const [hovered,setHovered]=useState<{id:string;x:number;y:number}|null>(null);const pointer=useRef<{x:number;y:number;held:string|null}|null>(null);
+ const svg=useRef<SVGSVGElement>(null);const pinned=useRef<string|null>(null);const [hovered,setHovered]=useState<{id:string;x:number;y:number}|null>(null);const pointer=useRef<{x:number;y:number;held:string|null;guard:string|null}|null>(null);
  useEffect(()=>{
   const media=matchMedia('(prefers-reduced-motion: reduce)');const mobile=matchMedia('(max-width: 800px)');let frame=0;let live=true;let start=0;let last=0;const velocity=nodes.map(()=>({x:0,y:0}));
   function animate(now:number){if(!live)return;if(paused.current){frame=requestAnimationFrame(animate);return;}if(now-last<33){frame=requestAnimationFrame(animate);return;}last=now;if(!start)start=now;const elapsed=(now-start)/1000;
    setPositions(previous=>nodes.map((node,index)=>{
     const cursor=pointer.current;const v=velocity[index];
-    if(cursor?.held===node.id||pinned.current===node.id){v.x=0;v.y=0;return previous[index];}
+    if(cursor?.held===node.id||cursor?.guard===node.id||pinned.current===node.id){v.x=0;v.y=0;return previous[index];}
     let x=node.x+Math.sin(elapsed*.65+index)*6;let y=node.y+Math.cos(elapsed*.55+index)*6;
     if(cursor){const dx=node.x-cursor.x;const dy=node.y-cursor.y;const distance=Math.hypot(dx,dy);if(distance>0&&distance<200){const force=100*Math.pow(1-distance/200,2);x+=dx/distance*force;y+=dy/distance*force;}}
     v.x=(v.x+(x-previous[index].x)*.045)*.84;v.y=(v.y+(y-previous[index].y)*.045)*.84;
@@ -48,7 +48,7 @@ export default function KnowledgeGraph(){
  if(target>=0&&distance(target)>14){let closest=8;positions.forEach((_,index)=>{const d=distance(index);if(d<closest){closest=d;target=index;}});}
  if(target<0){let closest=44;positions.forEach((_,index)=>{const d=distance(index);if(d<closest){closest=d;target=index;}});}
  if((event.target as Element).closest('.graph-hub')||drag.current)target=-1;
- const id=target>=0?nodes[target].id:null;pointer.current={x:position.x,y:position.y,held:id};
+ const id=target>=0?nodes[target].id:null;let guard:string|null=null;if(!id&&!drag.current){let closest=120;positions.forEach((_,index)=>{const d=distance(index);if(d<closest){closest=d;guard=nodes[index].id;}});}pointer.current={x:position.x,y:position.y,held:id,guard};
  if(id){const screen=new DOMPoint(positions[target].x,positions[target].y).matrixTransform(matrix);const bounds=event.currentTarget.parentElement!.getBoundingClientRect();setHovered({id,x:Math.max(12,Math.min(bounds.width-272,screen.x-bounds.left-130)),y:Math.max(65,Math.min(bounds.height-230,screen.y-bounds.top>bounds.height-230?screen.y-bounds.top-200:screen.y-bounds.top+28))});}else setHovered(null);}if(!drag.current)return;const scale=1000/event.currentTarget.getBoundingClientRect().width;const dx=(event.clientX-drag.current.x)*scale;const dy=(event.clientY-drag.current.y)*scale;if(Math.abs(dx)+Math.abs(dy)>4){drag.current.moved=true;setView(previous=>({...previous,x:drag.current!.originX+dx,y:drag.current!.originY+dy}));}}} onPointerUp={()=>{if(drag.current&&!drag.current.moved&&drag.current.guide)chooseNote(drag.current.guide);drag.current=null;}} onPointerCancel={()=>{drag.current=null;}}>
  <g transform={`translate(${view.x} ${view.y}) translate(500 370) scale(${view.zoom}) translate(-500 -370)`}>
  <g className="graph-edges" aria-hidden="true">{nodes.map((node,index)=><line key={node.id} x1={anchors[node.section][0]} y1={anchors[node.section][1]} x2={positions[index].x} y2={positions[index].y} className={`${related.has(node.id)?'is-connected':''} ${near(index)?'is-near':''}`} />)}{relations.map(edge=><line key={edge.from+'|'+edge.to} x1={point(edge.from).x} y1={point(edge.from).y} x2={point(edge.to).x} y2={point(edge.to).y} className={active&&(edge.from===active.id||edge.to===active.id)?'is-related':'graph-crosslink'}/>)}</g>
