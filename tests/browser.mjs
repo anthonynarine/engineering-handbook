@@ -24,7 +24,7 @@ try{
  const foundrySection=sidebar.getByRole('button',{name:'Foundry',exact:true});
  await foundrySection.focus();await page.keyboard.press('Enter');
  assert.equal(await foundrySection.getAttribute('aria-expanded'),'true');
- assert.equal(await sidebar.locator('.sidebar-section-links:visible a').count(),9);
+ assert.equal(await sidebar.locator('.sidebar-section-links:visible a').count(),articles.filter(article=>article.section==='foundry').length);
  await sidebar.getByRole('button',{name:'Security',exact:true}).click();
  assert.equal(await foundrySection.getAttribute('aria-expanded'),'false');
  assert.equal(await sidebar.locator('.sidebar-section-toggle[aria-expanded="true"]').count(),1);
