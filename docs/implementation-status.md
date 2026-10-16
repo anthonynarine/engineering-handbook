@@ -238,3 +238,11 @@ Added global and local views with one-to-three-step undirected link neighborhood
 - Improved light-theme icon contrast, softened unrelated connections, kept core nodes and labels above branch icons, and aligned mobile graph tools at the top right.
 - Added accessible graph instructions, guarded malformed URL fragments, and rejected unknown content sections or unreadable titles/summaries during builds.
 - Added browser regressions for graph gestures, article-to-local navigation, mobile filtering, and minimum 3:1 core icon contrast in both themes. Graph layout/view persistence and pinch gestures remain future improvements.
+
+### Optional globe view and bounded zoom — 2026-10-16
+
+- Added a 2D/3D toggle to the quiet graph toolbar; the default remains 2D and globe mode is shareable through `space=3d`.
+- Globe mode rotates through 3D coordinates on both axes using empty-canvas dragging or arrow keys. Depth controls draw order, icon size, and opacity while text stays upright. Rotation is manual, including when reduced motion is requested.
+- Node dragging remains independent of canvas rotation and does not navigate. Reset view restores the original orientation at 80%; Reset layout also clears globe node adjustments.
+- All graph zoom input paths clamp to 50–150%, with disabled buttons at the bounds and scroll changes still capped at 5% per event.
+- Browser coverage includes both zoom bounds, desktop and phone touch rotation, upright labels, reset, no automatic spin, node dragging, and mode reload. This uses local SVG projection with no additional rendering dependencies.
