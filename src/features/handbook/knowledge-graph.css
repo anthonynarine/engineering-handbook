@@ -47,3 +47,5 @@
 
 .graph-floating-title{position:absolute;top:17px;left:0;z-index:2;margin:0;font-size:14px;font-weight:500;letter-spacing:-.2px;color:var(--muted)}.graph-options{top:8px;right:0}.graph-options>summary{background:transparent;border-color:transparent}.graph-options>summary:hover{background:var(--panel);border-color:var(--line)}.graph-toolbar{top:8px;right:42px;padding:0}.knowledge-svg{padding-top:48px}.graph-toolbar button{min-height:32px}.graph-expanded-dialog .graph-floating-title{left:18px}.graph-expanded-dialog .graph-options{right:14px}.graph-expanded-dialog .graph-toolbar{right:56px}
 @media(max-width:800px){.graph-floating-title{position:static;margin:0 0 16px;font-size:14px}.graph-options{position:absolute;top:0;right:0;padding:0}.graph-options-body{width:min(340px,calc(100vw - 64px))}.graph-options>summary{margin-left:auto}}
+
+.graph-node-labels text.is-emphasized,.graph-note.is-selected text.graph-core-label,.graph-note.is-locked text.graph-core-label,.graph-note:focus-visible text.graph-core-label{fill:var(--node-color)}
