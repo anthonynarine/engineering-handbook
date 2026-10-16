@@ -60,3 +60,11 @@
 /* Keep the tools discoverable without competing with the brain. */
 @media(hover:hover) and (pointer:fine){.graph-toolbar,.graph-options>summary{opacity:.35;transition:opacity .18s ease}.graph-toolbar:hover,.graph-toolbar:focus-within,.graph-options:hover>summary,.graph-options:focus-within>summary,.graph-options[open]>summary{opacity:1}}
 @media(prefers-reduced-motion:reduce){.graph-toolbar,.graph-options>summary{transition:none}}
+
+/* Readable section colors in both themes; focus explains the graph's structure. */
+.graph-note,.graph-node-labels text{--node-color:var(--section-color)}
+[data-theme=light] .graph-note,[data-theme=light] .graph-node-labels text{--node-color:color-mix(in srgb,var(--section-color) 58%,#000)}
+.graph-edges .graph-crosslink{opacity:.13}.graph-edges.has-focus .graph-crosslink{opacity:.035}.graph-edges line.is-related{opacity:.8}.graph-edges line.graph-branch{opacity:.3}
+.graph-toolbar button,.graph-options>summary{min-width:32px;min-height:32px}
+.article-graph-link{color:var(--accent);font-size:11px;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:800px){.graph-toolbar{position:absolute;top:8px;right:50px}.knowledge-canvas{position:static}.knowledge-map .graph-options{top:8px}.graph-toolbar button,.graph-options>summary{min-width:34px;min-height:34px}.graph-empty{inset:90px 16px auto}.graph-node-labels text.is-emphasized{opacity:1!important}}

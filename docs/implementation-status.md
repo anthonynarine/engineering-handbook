@@ -229,3 +229,12 @@ Moved guide names onto the graph with larger section labels, emphasized active t
 ### Global and local graph workspace — October 15, 2026
 
 Added global and local views with one-to-three-step undirected link neighborhoods, focus selection, search and primary-topic filters, result counts and empty/reset states. Graph links now include public Markdown guide links as well as related-guide metadata; node radii reflect deduplicated link degree. URL query parameters retain filters, mode, focus and depth across reloads. Wheel zoom anchors at the pointer; plus/minus and arrow keys support keyboard exploration. An expanded native dialog retains workspace state and restores focus on close. Collapsible controls adjust center, repulsion, link force/distance, node size and link thickness, with layout/default resets. Rendering and physics exclude filtered nodes; offscreen and hidden-tab animation updates pause. Mobile retains searchable results and local graph lists instead of the animated canvas. Browser checks verify source-derived neighborhoods and degrees, query/topic combinations, reload, wheel and keyboard zoom, native sliders, defaults, dialog focus and mobile results. No backend or external graph service was added.
+
+### Brain usability and organization review — 2026-10-16
+
+- Fixed mobile section buttons so they filter both the brain and its guide list.
+- Added a guide-header link into that guide's local connections, and kept local focus stable while dragging another node.
+- Removed stale-hover navigation from blank canvas clicks; canceled gestures clear transient selection. Browser Ctrl/Meta-wheel zoom remains available.
+- Improved light-theme icon contrast, softened unrelated connections, kept core nodes and labels above branch icons, and aligned mobile graph tools at the top right.
+- Added accessible graph instructions, guarded malformed URL fragments, and rejected unknown content sections or unreadable titles/summaries during builds.
+- Added browser regressions for graph gestures, article-to-local navigation, mobile filtering, and minimum 3:1 core icon contrast in both themes. Graph layout/view persistence and pinch gestures remain future improvements.
