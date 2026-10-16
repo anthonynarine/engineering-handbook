@@ -8,7 +8,7 @@ try {
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(base+'/');
- await page.getByRole('link',{name:'Start the build workflow',exact:false}).click();
+ await page.getByRole('link',{name:'Start a build',exact:false}).click();
  await page.locator('article h1').filter({hasText:'My build workflow: from repo to release'}).waitFor();
  await page.goto(base+'/guide/django-middleware');
  const group=page.locator('.curriculum-group').filter({has:page.locator('summary', {hasText:'Core tools'})});
