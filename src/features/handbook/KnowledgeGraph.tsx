@@ -55,7 +55,7 @@ export default function KnowledgeGraph(){
  useEffect(()=>{
   const element=svg.current;if(!element)return;
   const observer=new IntersectionObserver(([entry])=>{onScreen.current=entry.isIntersecting;});observer.observe(element);
-  function wheel(event:WheelEvent){event.preventDefault();const matrix=element!.getScreenCTM();if(!matrix)return;const cursor=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());clearHover();setView(previous=>{const z=clamp(previous.zoom*Math.exp(-event.deltaY*.0015),.35,4);return {zoom:z,x:cursor.x-500-(cursor.x-500-previous.x)*z/previous.zoom,y:cursor.y-370-(cursor.y-370-previous.y)*z/previous.zoom};});}
+  function wheel(event:WheelEvent){event.preventDefault();const matrix=element!.getScreenCTM();if(!matrix)return;const cursor=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());clearHover();setView(previous=>{const pixels=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?element!.clientHeight:1);const step=clamp(-pixels*.0004,-Math.log(1.05),Math.log(1.05));const z=clamp(previous.zoom*Math.exp(step),.35,4);return {zoom:z,x:cursor.x-500-(cursor.x-500-previous.x)*z/previous.zoom,y:cursor.y-370-(cursor.y-370-previous.y)*z/previous.zoom};});}
   element.addEventListener('wheel',wheel,{passive:false});return()=>{observer.disconnect();element.removeEventListener('wheel',wheel);};
  },[expanded]);
  useEffect(()=>{
