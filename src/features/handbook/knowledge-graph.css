@@ -49,3 +49,7 @@
 @media(max-width:800px){.graph-floating-title{position:static;margin:0 0 16px;font-size:14px}.graph-options{position:absolute;top:0;right:0;padding:0}.graph-options-body{width:min(340px,calc(100vw - 64px))}.graph-options>summary{margin-left:auto}}
 
 .graph-node-labels text.is-emphasized,.graph-note.is-selected text.graph-core-label,.graph-note.is-locked text.graph-core-label,.graph-note:focus-visible text.graph-core-label{fill:var(--node-color)}
+
+/* A quiet boundary distinguishes graph gestures from page scrolling. */
+.knowledge-map{border:1px solid var(--line);border-radius:12px;overflow:hidden}.graph-floating-title{left:16px}.graph-options{right:12px}.graph-toolbar{right:54px}
+@media(max-width:800px){.graph-floating-title{margin:16px 16px 20px}.graph-options{top:8px;right:12px}}
