@@ -9,7 +9,8 @@ const browser=await chromium.launch(browserOptions());
 try{
  const page=await browser.newPage({viewport:{width:1500,height:1050}});const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(base+'/');const map=page.getByRole('region',{name:'Connected handbook'});const graph=map.getByRole('group',{name:'Interactive guide graph',exact:true});const inspector=map.getByRole('complementary',{name:'Selected knowledge'});
- await expect(graph.locator('.graph-note')).toHaveCount(articles.length);await expect(graph.locator('.graph-hub')).toHaveCount(8);
+ await expect(graph.locator('.graph-note')).toHaveCount(articles.length);await expect(graph.locator('.graph-hub')).toHaveCount(8);await expect(graph.locator('.graph-hub .graph-section-icon')).toHaveCount(8);await expect(page.locator('main > :first-child')).toHaveClass('knowledge-map');await expect(map.locator('h1')).toHaveText('Your engineering handbook.Connected.');
+ for(const icon of ['layers','workflow','server','monitor','shield-check','sparkles','cloud','folder-kanban'])await expect(graph.locator('.graph-hub svg.lucide-'+icon)).toHaveCount(1);
  const before=await graph.locator('.graph-note').first().getAttribute('transform');await expect.poll(()=>graph.locator('.graph-note').first().getAttribute('transform')).not.toBe(before);
 
  const neuron=graph.locator('.graph-note').first();await neuron.focus();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
