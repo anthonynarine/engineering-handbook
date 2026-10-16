@@ -56,3 +56,7 @@
 
 /* The brain remains available on phones; the guide list is an additional route. */
 @media(max-width:800px){.knowledge-canvas{display:flex}.knowledge-svg{display:block;width:100%;height:auto;min-height:0;max-height:none;aspect-ratio:600/740;padding-top:50px}.graph-toolbar{top:8px;right:50px;gap:0}.graph-toolbar output{width:30px}.graph-toolbar button{padding:6px;min-height:32px}.graph-expand{display:flex!important}.graph-node-icon{width:24px;height:24px;x:-12px;y:-12px}.graph-note.is-core .graph-node-icon{width:32px;height:32px;x:-16px;y:-16px}.graph-note .graph-dot{r:16px}.graph-note.is-core .graph-dot{r:22px}.graph-note text.graph-core-label{font-size:16px;transform:translateY(10px)}.graph-floating-title{font-size:12px;margin-right:210px;min-height:20px}.graph-options{z-index:5}.graph-inspector{border-top:1px solid var(--line)}.graph-expanded-dialog .knowledge-svg{max-height:none;min-height:0}.graph-expanded-dialog .graph-floating-title{margin-top:16px}.graph-options-body{max-height:65dvh;overflow:auto}}
+
+/* Keep the tools discoverable without competing with the brain. */
+@media(hover:hover) and (pointer:fine){.graph-toolbar,.graph-options>summary{opacity:.35;transition:opacity .18s ease}.graph-toolbar:hover,.graph-toolbar:focus-within,.graph-options:hover>summary,.graph-options:focus-within>summary,.graph-options[open]>summary{opacity:1}}
+@media(prefers-reduced-motion:reduce){.graph-toolbar,.graph-options>summary{transition:none}}
