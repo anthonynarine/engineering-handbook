@@ -11,7 +11,7 @@ const browser=await chromium.launch(browserOptions());
 try{
  const page=await browser.newPage({viewport:{width:1500,height:1050}});const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(base+'/');const map=page.getByRole('region',{name:'Connected handbook'});const graph=map.getByRole('group',{name:'Interactive guide graph',exact:true});
- await expect(graph.locator('.graph-note')).toHaveCount(articles.length);
+ await expect(graph.locator('.graph-note')).toHaveCount(articles.length);await expect(map.getByLabel('Knowledge graph zoom')).toHaveText('80%');
  async function setSlider(name,value){const slider=map.getByRole('slider',{name,exact:true});const min=Number(await slider.getAttribute('min'));const step=Number(await slider.getAttribute('step'));await slider.focus();await slider.press('Home');for(let index=0;index<Math.round((Number(value)-min)/step);index++)await slider.press('ArrowRight');}
  const degree=await graph.locator('.graph-note').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.guide,count:Number(node.dataset.connections),radius:Number(node.querySelector('.graph-dot').getAttribute('r'))})));
  for(const node of degree)assert.equal(node.count,adjacency.get(node.id).size,node.id);
@@ -27,8 +27,8 @@ try{
  await map.getByRole('combobox',{name:'Connection depth',exact:true}).selectOption('2');const local2=new Set(local1);for(const id of local1)for(const other of adjacency.get(id))local2.add(other);await expect(graph.locator('.graph-note')).toHaveCount(local2.size);assert.ok(local2.size>local1.size);
  await page.reload();await map.locator('.graph-options > summary').click();await expect(map.getByRole('combobox',{name:'Connection depth',exact:true})).toHaveValue('2');await expect(graph.locator('.graph-note')).toHaveCount(local2.size);
  await map.getByRole('button',{name:'Global graph',exact:true}).click();await expect(graph.locator('.graph-note')).toHaveCount(articles.length);
- assert.equal(new URL(page.url()).pathname,'/');await map.locator('.graph-options > summary').click();await graph.scrollIntoViewIfNeeded();await graph.hover({position:{x:20,y:200}});await page.mouse.wheel(0,-200);await expect.poll(()=>map.getByLabel('Knowledge graph zoom').textContent()).not.toBe('100%');await map.getByRole('button',{name:'Reset knowledge graph view'}).click();
- await graph.locator('.graph-note').first().focus();await page.keyboard.press('+');await expect(map.getByLabel('Knowledge graph zoom')).toHaveText('120%');await map.getByRole('button',{name:'Reset knowledge graph view'}).click();
+ assert.equal(new URL(page.url()).pathname,'/');await map.locator('.graph-options > summary').click();await graph.scrollIntoViewIfNeeded();await graph.hover({position:{x:20,y:200}});await page.mouse.wheel(0,-200);await expect.poll(()=>map.getByLabel('Knowledge graph zoom').textContent()).not.toBe('80%');await map.getByRole('button',{name:'Reset knowledge graph view'}).click();
+ await graph.locator('.graph-note').first().focus();await page.keyboard.press('+');await expect(map.getByLabel('Knowledge graph zoom')).toHaveText('100%');await map.getByRole('button',{name:'Reset knowledge graph view'}).click();
  await map.locator('.graph-options > summary').click();await map.locator('.graph-settings summary').click();const marker=graph.locator('.graph-note').first().locator('.graph-dot');const radius=Number(await marker.getAttribute('r'));
  await setSlider('Node size','1.5');await expect.poll(async()=>Number(await marker.getAttribute('r'))).toBeGreaterThan(radius);
  await setSlider('Link thickness','1.5');await expect(graph.locator('.graph-edges line').first()).toHaveCSS('stroke-width','1.5px');
