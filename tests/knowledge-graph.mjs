@@ -9,7 +9,7 @@ const browser=await chromium.launch(browserOptions());
 try{
  const page=await browser.newPage({viewport:{width:1500,height:1050}});const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto(base+'/');const map=page.getByRole('region',{name:'Connected handbook'});const graph=map.getByRole('group',{name:'Interactive guide graph',exact:true});const inspector=map.getByRole('complementary',{name:'Selected knowledge'});
- await expect(graph.locator('.graph-note')).toHaveCount(articles.length);await expect(graph.locator('.graph-hub')).toHaveCount(8);await expect(graph.locator('.graph-hub .graph-section-icon')).toHaveCount(8);await expect(page.locator('main > :first-child')).toHaveClass('knowledge-map');await expect(map.locator('h1')).toHaveText('Your engineering handbook.Connected.');
+ await expect(graph.locator('.graph-note')).toHaveCount(articles.length);await expect(graph.locator('.graph-hub')).toHaveCount(8);await expect.poll(()=>graph.locator('.graph-node-labels text').count()).toBeGreaterThan(1);await expect(graph.locator('.graph-hub .graph-section-icon')).toHaveCount(8);await expect(page.locator('main > :first-child')).toHaveClass('knowledge-map');await expect(map.locator('h1')).toHaveText('Your engineering handbook.Connected.');
  for(const icon of ['layers','workflow','server','monitor','shield-check','sparkles','cloud','folder-kanban'])await expect(graph.locator('.graph-hub svg.lucide-'+icon)).toHaveCount(1);
  const before=await graph.locator('.graph-note').first().getAttribute('transform');await expect.poll(()=>graph.locator('.graph-note').first().getAttribute('transform')).not.toBe(before);
 
@@ -21,19 +21,22 @@ try{
  await neuron.locator('.graph-hit').click();await expect(inspector.getByRole('heading',{level:3})).toHaveText(articles[0].title);
  await page.mouse.move(0,0);
 
- const outer=graph.locator('[data-guide="ai-evaluation-and-fallbacks"]');await outer.focus();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const outer=graph.locator('.graph-note[data-guide="ai-evaluation-and-fallbacks"]');await outer.focus();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  const dot=await outer.locator('.graph-hit').boundingBox();const lockedPosition=await outer.getAttribute('transform');
  await page.mouse.move(dot.x+dot.width/2-90,dot.y+dot.height/2);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);
  await page.mouse.move(dot.x+dot.width/2-36,dot.y+dot.height/2);
- const preview=map.locator('.graph-preview');await expect(preview.locator('strong')).toHaveText(articles.find(article=>article.slug==='ai-evaluation-and-fallbacks').title);
- await page.mouse.move(dot.x+dot.width/2-60,dot.y+dot.height/2);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);await expect(preview).toBeVisible();await map.screenshot({path:'/private/tmp/handbook-node-lock-preview.png'});
+ const preview=inspector;await expect(preview.locator('h3')).toHaveText(articles.find(article=>article.slug==='ai-evaluation-and-fallbacks').title);
+ await page.mouse.move(dot.x+dot.width/2-60,dot.y+dot.height/2);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);await expect(preview).toBeVisible();await expect(graph.locator('[data-label-guide="ai-evaluation-and-fallbacks"]')).toBeVisible();await map.screenshot({path:'/private/tmp/handbook-node-lock-preview.png'});
  await preview.getByRole('button',{name:'Select guide'}).click();await expect(inspector.getByRole('heading',{level:3})).toHaveText(articles.find(article=>article.slug==='ai-evaluation-and-fallbacks').title);
  await page.mouse.move(0,0);await page.waitForTimeout(180);await expect(outer).toHaveAttribute('transform',lockedPosition);
- await graph.getByRole('button',{name:'Explore section: Backend',exact:true}).focus();await page.keyboard.press('Enter');await expect(inspector.getByRole('heading',{level:3})).toHaveText('Backend');await expect(inspector.getByRole('link',{name:'Start here'})).toHaveAttribute('href','/guide/django-toolkit');
+
+ const dragDot=await outer.locator('.graph-hit').boundingBox();const startPoint=await outer.getAttribute('transform');await page.mouse.move(dragDot.x+dragDot.width/2,dragDot.y+dragDot.height/2);await page.mouse.down();await page.mouse.move(dragDot.x+dragDot.width/2+55,dragDot.y+dragDot.height/2-25,{steps:8});await page.mouse.up();await expect(outer).not.toHaveAttribute('transform',startPoint);await page.mouse.move(0,0);
+ await graph.getByRole('button',{name:'Explore section: Backend',exact:true}).focus();await page.keyboard.press('Enter');await expect(graph.getByRole('button',{name:'Explore section: Backend',exact:true})).toHaveAttribute('aria-pressed','true');await expect(inspector).toBeHidden();
  await graph.getByRole('button',{name:'Explore guide: Git command reference',exact:true}).focus();await page.keyboard.press('Enter');await expect(inspector.getByRole('heading',{level:3})).toHaveText('Git command reference');await expect(graph.locator('.graph-edges .is-related')).not.toHaveCount(0);await expect(inspector.getByRole('link',{name:'Open this guide'})).toHaveAttribute('href','/guide/git-command-reference');
  await map.getByRole('button',{name:'Zoom in knowledge graph',exact:true}).click();await expect(map.getByLabel('Knowledge graph zoom')).toHaveText('120%');
  await map.getByRole('button',{name:'Reset knowledge graph view'}).click();await expect(map.getByLabel('Knowledge graph zoom')).toHaveText('100%');
  const bounds=await graph.boundingBox();await page.mouse.move(bounds.x+bounds.width*.95,bounds.y+bounds.height*.45);await page.mouse.down();await page.mouse.move(bounds.x+bounds.width*.95-80,bounds.y+bounds.height*.45+40,{steps:5});await page.mouse.up();await expect(graph.locator(':scope > g')).not.toHaveAttribute('transform','translate(0 0) translate(500 370) scale(1) translate(-500 -370)');await map.getByRole('button',{name:'Reset knowledge graph view'}).click();
+ await expect(map.locator('.graph-inspector-links')).toBeHidden();
  await map.screenshot({path:'/private/tmp/handbook-knowledge-graph-dark.png'});
  await page.getByRole('button',{name:'Use light theme'}).click();await map.screenshot({path:'/private/tmp/handbook-knowledge-graph-light.png'});
  await page.emulateMedia({reducedMotion:'reduce'});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));const still=await graph.locator('.graph-note').first().getAttribute('transform');await page.waitForTimeout(150);assert.equal(await graph.locator('.graph-note').first().getAttribute('transform'),still);

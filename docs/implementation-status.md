@@ -221,3 +221,7 @@ Expanded guide hit areas and added screen-space proximity capture: the nearest a
 ### Icon hubs and graph-first landing page — October 15, 2026
 
 Promoted the connected graph to the first homepage section and made its heading the page's main heading. Kept the build-workflow action and complete guide directory beside the introduction. Replaced section hub dots with labeled local Lucide icons for Start here, Foundry, Backend, Frontend, Security, AI, Cloud & CI/CD and Projects. Hubs retain keyboard operation, hover feedback and section selection. The mobile section list remains the first browsing control below the introduction. Browser checks verify all eight hub icons and the graph's position at the top of main content.
+
+### Direct graph names and elastic interaction — October 15, 2026
+
+Moved guide names onto the graph with larger section labels, emphasized active titles and collision-aware placement. Label density increases on zoom; names support selection and dragging. Replaced the duplicate desktop section-list panel with a full-width graph and compact selected-guide actions; the mobile topic/list alternative remains. The layout now uses damped springs, guide separation and related-link forces, with actual guide dragging and elastic neighbor response. Pointer acquisition, pinned selection and reduced-motion handling remain. Browser checks cover direct labels, dragging, lock retention, compact actions, themes and the mobile list.
