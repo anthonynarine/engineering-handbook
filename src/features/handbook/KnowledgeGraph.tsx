@@ -36,7 +36,7 @@ export default function KnowledgeGraph(){
  const runtime=useRef({forces,visibleIds,targets});runtime.current={forces,visibleIds,targets};
  const active=selected&&visibleIds.has(selected)?nodeById.get(selected):null;const preview=hovered&&visibleIds.has(hovered)?nodeById.get(hovered):null;const inspected=preview??active??(mode==='local'&&visibleIds.has(focus)?nodeById.get(focus):null);
  const related=new Set(inspected?[inspected.id,...neighbors[inspected.index].map(index=>nodes[index].id)]:visible.filter(node=>node.section===(topic==='all'?section:topic)).map(node=>node.id));
- function update(changes:Record<string,string>){const next=new URLSearchParams(params);for(const [key,value] of Object.entries(changes)){if(value)next.set(key,value);else next.delete(key);}setParams(next,{replace:true});}
+ function update(changes:Record<string,string>){setParams(previous=>{const next=new URLSearchParams(previous);for(const [key,value] of Object.entries(changes)){if(value)next.set(key,value);else next.delete(key);}return next;},{replace:true});}
  function clearHover(){pointer.current=null;setHovered(null);}
  function clearFilters(){update({gq:'',topic:'',graph:'',focus:'',depth:''});clearHover();}
  function chooseSection(id:string){setSection(id);setSelected(null);pinned.current=null;clearHover();if(topic!=='all')update({topic:id});}

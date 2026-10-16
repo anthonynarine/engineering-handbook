@@ -10,6 +10,6 @@ try{
  const box=await node.locator('.graph-dot').boundingBox();assert.ok(box);const x=box.x+box.width/2,y=box.y+box.height/2;await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+65,y-35,{steps:12});await page.mouse.up();assert.equal(new URL(page.url()).pathname,'/');assert.notEqual(await node.getAttribute('transform'),before);
  await node.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/\/guide\/git-basics$/);
  await page.goBack();await graph.locator('.graph-note[data-guide="git-basics"]').focus();await page.keyboard.press('Space');const dot=graph.locator('.graph-note[data-guide="git-basics"] .graph-dot');await dot.click({force:true});await expect(page).toHaveURL(/\/guide\/git-basics$/);
- await page.goBack();await page.emulateMedia({reducedMotion:'reduce'});const stable=await graph.locator('.graph-note').first().getAttribute('transform');await page.waitForTimeout(250);assert.equal(await graph.locator('.graph-note').first().getAttribute('transform'),stable);
+ await page.goBack();await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(150);const stable=await graph.locator('.graph-note').first().getAttribute('transform');await page.waitForTimeout(250);assert.equal(await graph.locator('.graph-note').first().getAttribute('transform'),stable);
  assert.deepEqual(errors,[]);console.log('Knowledge graph passed: plain guide cloud, tucked controls, stable focus, drag without navigation, click/Enter opens guide, reduced motion.');
 }finally{await browser.close();}
