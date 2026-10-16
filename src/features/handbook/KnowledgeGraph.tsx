@@ -62,10 +62,11 @@ export default function KnowledgeGraph(){
     const {forces:f,visibleIds:ids,targets:t}=runtime.current;const v=velocity[index];const cursor=pointer.current;
     if(!ids.has(node.id)||cursor?.held===node.id||cursor?.guard===node.id||pinned.current===node.id){v.x=0;v.y=0;return previous[index];}
     let x=t[index].x;let y=t[index].y;let fx=0;let fy=0;
+    const cx=previous[index].x-500;const cy=previous[index].y-370;const radialDistance=Math.hypot(cx,cy);if(radialDistance>270){const pull=(radialDistance-270)*.08;fx-=cx/radialDistance*pull;fy-=cy/radialDistance*pull;}
     previous.forEach((other,j)=>{if(j===index||!ids.has(nodes[j].id))return;const dx=previous[index].x-other.x;const dy=previous[index].y-other.y;const d=Math.hypot(dx,dy);if(d>0){const push=Math.min(10,500*f.repel/d);fx+=dx/d*push;fy+=dy/d*push;}});
     neighbors[index].forEach(j=>{if(!ids.has(nodes[j].id))return;const dx=previous[j].x-previous[index].x;const dy=previous[j].y-previous[index].y;const distance=Math.max(1,Math.hypot(dx,dy));const force=(distance-f.distance)*f.link;fx+=dx/distance*force;fy+=dy/distance*force;});
     v.x=clamp((v.x+(x-previous[index].x)*f.center+fx)*.86,-12,12);v.y=clamp((v.y+(y-previous[index].y)*f.center+fy)*.86,-12,12);
-    return {x:clamp(previous[index].x+v.x,14,986),y:clamp(previous[index].y+v.y,14,716)};
+    return {x:previous[index].x+v.x,y:previous[index].y+v.y};
    }));frame=requestAnimationFrame(animate);
   }
   function preference(){cancelAnimationFrame(frame);velocity.forEach(v=>{v.x=0;v.y=0;});if(media.matches||mobile.matches)setPositions(initialPositions());else frame=requestAnimationFrame(animate);}
@@ -79,7 +80,7 @@ export default function KnowledgeGraph(){
  }
  function pointerMove(event:React.PointerEvent<SVGSVGElement>){
   paused.current=false;const point=world(event.clientX,event.clientY);if(!point)return;
-  if(nodeDrag.current){const drag=nodeDrag.current;if(Math.hypot(point.x-drag.pointer.x,point.y-drag.pointer.y)>5/view.zoom)drag.moved=true;setPositions(previous=>previous.map((p,index)=>index===drag.index?{x:clamp(drag.origin.x+point.x-drag.pointer.x,14,986),y:clamp(drag.origin.y+point.y-drag.pointer.y,14,716)}:p));return;}
+  if(nodeDrag.current){const drag=nodeDrag.current;if(Math.hypot(point.x-drag.pointer.x,point.y-drag.pointer.y)>5/view.zoom)drag.moved=true;setPositions(previous=>previous.map((p,index)=>index===drag.index?{x:drag.origin.x+point.x-drag.pointer.x,y:drag.origin.y+point.y-drag.pointer.y}:p));return;}
   const matrix=event.currentTarget.querySelector('g')!.getScreenCTM()!;const scale=Math.hypot(matrix.a,matrix.b);
   const distance=(node:typeof nodes[number])=>Math.hypot(positions[node.index].x-point.x,positions[node.index].y-point.y)*scale;
   let target=pointer.current?.held&&visibleIds.has(pointer.current.held)?nodeById.get(pointer.current.held)!:null;

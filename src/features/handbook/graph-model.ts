@@ -3,8 +3,8 @@ import {articles} from './index';
 import {navigationSection} from './navigation';
 export const anchors:Record<string,[number,number]>={start:[135,125],foundry:[430,120],client:[780,155],server:[580,340],security:[220,365],ai:[285,590],operations:[800,570],projects:[560,595]};
 export const graphNodes=articles.map((article,index)=>{
- const section=navigationSection(article);const angle=index*2.39996;const radius=310*Math.sqrt((index+.5)/articles.length);
- return {id:article.slug,index,article,section,x:500+Math.cos(angle)*radius*1.3,y:370+Math.sin(angle)*radius};
+ const section=navigationSection(article);const angle=index*2.39996;const radius=280*Math.sqrt((index+.5)/articles.length);
+ return {id:article.slug,index,article,section,x:500+Math.cos(angle)*radius,y:370+Math.sin(angle)*radius};
 });
 export const nodeById=new Map(graphNodes.map(node=>[node.id,node]));
 export const graphLinks=[...new Map(graphNodes.flatMap(node=>{
