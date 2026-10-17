@@ -50,3 +50,11 @@ Commit the reviewed source, then run `npm run release:prepare`. This audits depe
 CI runs the same gates on pull requests and pushes without deployment credentials. Install CI Chromium with `npx playwright install --with-deps chromium`. macOS uses installed Chrome; other environments use Playwright Chromium. `dist/release.json` identifies the deployed source revision. Test fixtures build only into ignored `.security-dist/` and are rejected from the public deployment.
 
 A local Git history is not an off-device backup. The new workflow becomes active only after these commits are pushed to GitHub; required checks and branch protection must be enabled there. No remote repository or promotion is created by these changes.
+
+## Standalone brain artwork
+
+Run `npm run build:art` to create `artifacts/the-brain.html`. Open that single file directly in a browser. It embeds its code, graph data, icons, and styles, works offline, and defaults to the rotating 3D view. Clicking a node explores it within the artwork. The generated file is ignored; rebuild it after adding guides. Its offline browser test runs in the release gate.
+
+## Educational reading paths
+
+Concept introductions live alongside the practical manual: MCP under AI → Learn the concepts; CI/CD under Cloud & CI/CD → Learn the concepts; and the publisher overview, NIST, and OWASP under Security → Learn the standards. Each lesson includes an original example, a diagram, self-check questions, answer keys, and direct official references. `reference_sources/concepts-review.md` records the review scope. These lessons describe concepts and do not claim an integration, certification, or compliance assessment.

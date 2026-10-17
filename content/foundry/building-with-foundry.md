@@ -12,6 +12,10 @@ sources: [reference_sources/foundry-inspection.md]
 related: [foundry-repository, system-overview, security-boundaries, frontend-architecture]
 ---
 
+## Learn the tool connection concept
+
+Curious about MCP? Read [how AI connects to tools and context](/guide/mcp-fundamentals) to distinguish the connection protocol from Foundry work coordination and application permissions.
+
 ## Start with the complete setup tutorial
 
 New to Foundry? Follow [Foundry from zero](/guide/foundry-repository): create and open a GitHub repository, install the Python tool, initialize native configuration, register owner trust, start sessions, run a first task, and understand release/CI/recovery. Each step identifies where to type it and what to verify.

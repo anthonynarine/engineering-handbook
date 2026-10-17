@@ -12,6 +12,10 @@ sources: [docs/deployment.md, .github/workflows/verify.yml, scripts/prepare-rele
 related: [foundry-review-release, testing-strategy, heroku-django-deployment, operational-runbooks]
 ---
 
+## Learn the concepts first
+
+New to the terms? Read [CI/CD: how a change becomes a release](/guide/ci-cd-fundamentals) for the difference between integration, delivery, deployment, and release evidence.
+
 ## Choose the step you need
 
 Continuous integration checks a change. Delivery prepares a candidate for release. Deployment publishes it. Your project decides which steps are automated and where an owner must approve. Use this page as the map to the existing guides.

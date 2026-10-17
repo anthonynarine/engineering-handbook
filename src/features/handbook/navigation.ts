@@ -32,7 +32,12 @@ export function navigationGroups(section:string,guides:Pick<Article,'slug'>[]) {
   {name:'Getting started',slugs:['django-setup','django-first-api']},
   {name:'Core tools',slugs:['django-models-orm','api-contracts','safe-database-migrations','django-views','django-rest-boundaries','services-and-selectors','django-middleware','django-signals','websocket-design','django-channels']},
   {name:'Jobs & testing',slugs:['reliable-job-lifecycle','django-testing-delivery','testing-strategy']},
+ ]:section==='ai'?[
+  {name:'Learn the concepts',slugs:['mcp-fundamentals']},
+ ]:section==='security'?[
+  {name:'Learn the standards',slugs:['security-standards-fundamentals','nist-fundamentals','owasp-fundamentals']},
  ]:section==='operations'?[
+  {name:'Learn the concepts',slugs:['ci-cd-fundamentals']},
   {name:'Hosting & cloud design',slugs:['deployment-platforms']},
   {name:'CI/CD & releases',slugs:['ci-cd-release-workflow']},
   {name:'Heroku field guide',slugs:['heroku-django-deployment','heroku-operations']},

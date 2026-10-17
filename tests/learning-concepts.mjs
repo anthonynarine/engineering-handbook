@@ -1,0 +1,15 @@
+import {chromium,expect} from '@playwright/test';
+import {browserOptions} from './browser-options.mjs';
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const registry=JSON.parse(fs.readFileSync('src/generated/articles.json','utf8'));
+const lessons=[['mcp-fundamentals','AI','Learn the concepts'],['ci-cd-fundamentals','Cloud & CI/CD','Learn the concepts'],['security-standards-fundamentals','Security','Learn the standards'],['nist-fundamentals','Security','Learn the standards'],['owasp-fundamentals','Security','Learn the standards']];
+for(const [slug] of lessons){const article=registry.find(a=>a.slug===slug);assert.ok(article);for(const heading of ['## What am I learning?','## Check your understanding','## Answer key'])assert.ok(article.body.includes(heading),slug+' missing '+heading);assert.ok(!/```(?:sh|bash|yaml|json)/.test(article.body),'concepts should not become setup recipes');assert.ok(article.body.includes('https://'),'official sources belong next to the concepts');}
+const base=process.env.HANDBOOK_TEST_URL??'http://127.0.0.1:4173';const browser=await chromium.launch(browserOptions());
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ for(const [slug,section,group] of lessons){await page.goto(base+'/guide/'+slug);await expect(page.locator('article h1')).toHaveText(registry.find(a=>a.slug===slug).title);await expect(page.locator('article').getByRole('heading',{name:'Check your understanding',exact:true})).toBeVisible();const sidebar=page.locator('.sidebar-section').filter({has:page.getByRole('button',{name:section,exact:true})});const expanded=sidebar.locator('.curriculum-group').filter({has:page.locator('summary').filter({hasText:group})});await expect(expanded).toHaveAttribute('open','');await expect(expanded.locator('a[aria-current=page]')).toHaveAttribute('href','/guide/'+slug);await expect(page.locator('.diagram svg').first()).toBeVisible();}
+ await expect(page.getByRole('navigation',{name:'Article sequence'}).getByRole('link',{name:/Previous in this topic/})).toHaveAttribute('href','/guide/nist-fundamentals');
+ await page.goto(base+'/guide/mcp-fundamentals');await expect(page.locator('article').getByRole('link',{name:'Official architecture overview'})).toHaveAttribute('href',/modelcontextprotocol.io/);await page.goto(base+'/guide/ci-cd-release-workflow');await expect(page.locator('article').getByRole('link',{name:'CI/CD: how a change becomes a release'})).toHaveAttribute('href','/guide/ci-cd-fundamentals');
+ await page.setViewportSize({width:390,height:844});await page.goto(base+'/guide/owasp-fundamentals');assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:'/private/tmp/handbook-security-concepts-mobile.png'});assert.deepEqual(errors,[]);console.log('Educational concepts passed: five sourced lessons, examples/diagrams, self-checks, educational scope, sidebar groups, reading sequence and mobile containment.');
+}finally{await browser.close();}

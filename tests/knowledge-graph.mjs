@@ -1,11 +1,13 @@
+import fs from 'node:fs';
 import {chromium,expect} from '@playwright/test';
 import {browserOptions} from './browser-options.mjs';
 import assert from 'node:assert/strict';
+const articleCount=JSON.parse(fs.readFileSync('src/generated/articles.json','utf8')).length;
 const browser=await chromium.launch(browserOptions());
 try{
  const page=await browser.newPage({viewport:{width:1500,height:1050}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.env.HANDBOOK_TEST_URL??'http://127.0.0.1:4173');
- const graph=page.getByRole('group',{name:'Interactive guide graph',exact:true});await expect(graph.locator('.graph-note')).toHaveCount(97);await expect(graph.locator('.graph-hub')).toHaveCount(0);
- await expect(graph.locator('.graph-node-icon')).toHaveCount(97);await expect(graph.locator('[data-core]')).toHaveCount(8);const securityIcons=await graph.locator('[data-section=security] .graph-node-icon').evaluateAll(icons=>icons.map(icon=>icon.innerHTML));assert.ok(securityIcons.length>1&&securityIcons.every(icon=>icon===securityIcons[0]),'security branches repeat the core shield');await expect(graph.locator('[data-core] .graph-core-label')).toHaveCount(8);
+ const graph=page.getByRole('group',{name:'Interactive guide graph',exact:true});await expect(graph.locator('.graph-note')).toHaveCount(articleCount);await expect(graph.locator('.graph-hub')).toHaveCount(0);
+ await expect(graph.locator('.graph-node-icon')).toHaveCount(articleCount);await expect(graph.locator('[data-core]')).toHaveCount(8);const securityIcons=await graph.locator('[data-section=security] .graph-node-icon').evaluateAll(icons=>icons.map(icon=>icon.innerHTML));assert.ok(securityIcons.length>1&&securityIcons.every(icon=>icon===securityIcons[0]),'security branches repeat the core shield');await expect(graph.locator('[data-core] .graph-core-label')).toHaveCount(8);
  await expect(page.locator('.knowledge-header')).toHaveCount(0);await expect(page.getByRole('region',{name:'Connected handbook'})).toHaveCSS('border-top-width','1px');
  await expect(page.getByRole('searchbox',{name:'Search graph'})).toBeHidden();
  await page.waitForTimeout(2000);const cloud=await graph.locator('.graph-note').evaluateAll(nodes=>nodes.map(node=>{const matrix=node.transform.baseVal.consolidate().matrix;return {x:matrix.e,y:matrix.f};}));const width=Math.max(...cloud.map(p=>p.x))-Math.min(...cloud.map(p=>p.x));const height=Math.max(...cloud.map(p=>p.y))-Math.min(...cloud.map(p=>p.y));assert.ok(width/height>.8&&width/height<1.2,'cloud should be round');assert.ok(cloud.every(p=>Math.hypot(p.x-500,p.y-370)<350),'nodes settle within a radial envelope');

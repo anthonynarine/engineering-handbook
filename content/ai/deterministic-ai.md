@@ -12,6 +12,10 @@ sources: [reference_sources/estateiq-inspection.md]
 related: [ai-context-and-document-qa, ledger-and-read-models, estateiq-tenant-boundary]
 ---
 
+## Learn the connection model
+
+For the concepts behind connecting an AI host to external capabilities, read [MCP: tools and context](/guide/mcp-fundamentals). MCP supplies an integration contract; the scoped business facts still come from the application.
+
 ## Start with a fact-producing system
 
 EstateIQ's portfolio Copilot is a read-only interpretation layer. It does not own charges, payments, leases, expenses, or balances. Domain selectors produce the facts, and registered tools decide how to answer a supported question.

@@ -246,3 +246,10 @@ Added global and local views with one-to-three-step undirected link neighborhood
 - Node dragging remains independent of canvas rotation and does not navigate. Reset view restores the original orientation at 80%; Reset layout also clears globe node adjustments.
 - All graph zoom input paths clamp to 50–150%, with disabled buttons at the bounds and scroll changes still capped at 5% per event.
 - Browser coverage includes both zoom bounds, desktop and phone touch rotation, upright labels, reset, no automatic spin, node dragging, and mode reload. This uses local SVG projection with no additional rendering dependencies.
+
+### Standalone brain artwork and conceptual learning paths — 2026-10-17
+
+- Added `npm run build:art`, producing the single offline `artifacts/the-brain.html` file from the shared graph component. It uses an art-only layout, starts in 3D, and explores selected nodes without navigating away. Inline code is authorized by an embedded CSP hash; external connections are disabled.
+- Added educational MCP and CI/CD introductions, plus a three-part security reading path covering publishers/standards, NIST, and OWASP. Lessons use conceptual examples, diagrams, self-checks, and answer keys, with official references reviewed on 2026-10-17.
+- Grouped conceptual lessons in the existing sidebar homes and cross-linked practical entry points. New articles automatically join the brain and artwork; graph tests now derive counts from the registry.
+- Added offline artifact and educational navigation checks to the release gate. No MCP server, pipeline credentials, certification, or compliance assessment is configured by these lessons.

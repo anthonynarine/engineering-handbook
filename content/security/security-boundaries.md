@@ -12,6 +12,10 @@ sources: [reference_sources/MOONLIGHT_ENGINEERING_HANDBOOK_BUILD_PLAN.original.m
 related: [system-overview, tenant-isolation, services-and-selectors]
 ---
 
+## Learn the references first
+
+For the vocabulary behind this design, start with [security standards and their publishers](/guide/security-standards-fundamentals), then [NIST](/guide/nist-fundamentals) and [OWASP](/guide/owasp-fundamentals).
+
 ## What this design protects
 
 The reports application needs to protect organization-owned records, generated files, session credentials, and operational secrets. Its attacker model includes an anonymous caller, a valid user from another organization, a revoked member with an unexpired token, and a compromised provider or worker credential.

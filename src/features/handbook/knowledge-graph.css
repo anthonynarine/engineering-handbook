@@ -70,5 +70,5 @@
 @media(max-width:800px){.graph-toolbar{position:absolute;top:8px;right:50px}.knowledge-canvas{position:static}.knowledge-map .graph-options{top:8px}.graph-toolbar button,.graph-options>summary{min-width:34px;min-height:34px}.graph-empty{inset:90px 16px auto}.graph-node-labels text.is-emphasized{opacity:1!important}}
 
 /* Orbit is optional; manual rotation also works with reduced motion enabled. */
-.graph-orbit-toggle{gap:4px;align-items:center}.graph-orbit-toggle span{font-size:9px}.graph-orbit-toggle[aria-pressed=true]{color:var(--accent);background:var(--soft)}.graph-toolbar button:disabled{opacity:.3;cursor:default}.knowledge-svg[data-space=3d]{cursor:grab}.knowledge-svg[data-space=3d]:active{cursor:grabbing}
+.graph-orbit-toggle{gap:4px;align-items:center}.graph-orbit-toggle span{font-size:9px}.graph-orbit-toggle[aria-pressed=true]{color:var(--accent);background:var(--soft)}.graph-toolbar button:disabled{opacity:.3;cursor:default}.knowledge-svg[data-space="3d"]{cursor:grab}.knowledge-svg[data-space="3d"]:active{cursor:grabbing}
 @media(max-width:800px){.graph-floating-title{margin-right:50px;margin-bottom:58px}.graph-toolbar{top:44px;right:12px}.graph-expanded-dialog .graph-toolbar{right:12px;top:44px}}

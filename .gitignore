@@ -28,3 +28,7 @@ test-results/
 
 # Owner-supplied planning context is not part of the public source snapshot
 ENGINEERING_HANDBOOK_BUILD_PLAN.md
+
+# Generated standalone HTML artwork
+.artifacts/
+artifacts/
