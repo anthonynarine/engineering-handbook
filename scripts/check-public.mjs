@@ -4,7 +4,7 @@ import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {findings} from './lib/public-scan.mjs';
 export const sourceRoots=['src','content','reference_sources','scripts','tests','docs','.github','public'];
-const rootFiles=['.gitignore','README.md','index.html','netlify.toml','package.json','package-lock.json','tsconfig.json','vite.config.ts'];
+const rootFiles=['.gitignore','AGENTS.md','CLAUDE.md','README.md','index.html','netlify.toml','package.json','package-lock.json','tsconfig.json','vite.config.ts'];
 const roots=process.argv.includes('--dist')?['dist']:[...sourceRoots,...rootFiles];
 let count=0;const failures=[];
 function scanFile(file){count++;if(/\.(?:[cm]?[jt]sx?|json|html|css|md|ya?ml|toml|txt)$/.test(file))for(const kind of findings(fs.readFileSync(file,'utf8')))failures.push(`${file}: ${kind}`);}
