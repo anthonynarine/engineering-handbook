@@ -36,6 +36,7 @@ export function navigationGroups(section:string,guides:Pick<Article,'slug'>[]) {
   {name:'Learn the concepts',slugs:['mcp-fundamentals']},
  ]:section==='security'?[
   {name:'Learn the standards',slugs:['security-standards-fundamentals','nist-fundamentals','owasp-fundamentals']},
+  {name:'Monitoring & alerts',slugs:['observability-and-security-monitoring']},
  ]:section==='operations'?[
   {name:'Learn the concepts',slugs:['ci-cd-fundamentals']},
   {name:'Hosting & cloud design',slugs:['deployment-platforms']},

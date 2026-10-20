@@ -9,7 +9,7 @@ tags: ["reference", "contracts", "delivery", "manual"]
 status: "established-pattern"
 lastReviewed: "2026-10-14"
 sources: ["reference_sources/manual-reference.md"]
-related: ["troubleshooting-desk", "recovery-runbook", "lumen-aws-security"]
+related: ["troubleshooting-desk", "recovery-runbook", "lumen-aws-security", "observability-and-security-monitoring"]
 ---
 
 ## Before an incident

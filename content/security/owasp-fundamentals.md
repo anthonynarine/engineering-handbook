@@ -8,7 +8,7 @@ tags: [owasp, top 10, asvs, authorization, application security, concepts, educa
 status: established-pattern
 lastReviewed: "2026-10-17"
 sources: [reference_sources/concepts-review.md]
-related: [security-standards-fundamentals, nist-fundamentals, estateiq-tenant-boundary, authentication-options, auth-and-document-drills]
+related: [security-standards-fundamentals, nist-fundamentals, estateiq-tenant-boundary, authentication-options, auth-and-document-drills, observability-and-security-monitoring]
 ---
 
 ## What am I learning?

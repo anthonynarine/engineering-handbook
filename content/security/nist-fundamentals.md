@@ -8,7 +8,7 @@ tags: [nist, csf, ssdf, cybersecurity framework, secure development, concepts, e
 status: established-pattern
 lastReviewed: "2026-10-17"
 sources: [reference_sources/concepts-review.md]
-related: [security-standards-fundamentals, owasp-fundamentals, private-document-lifecycle, recovery-runbook, ci-cd-fundamentals]
+related: [security-standards-fundamentals, owasp-fundamentals, private-document-lifecycle, recovery-runbook, ci-cd-fundamentals, observability-and-security-monitoring]
 ---
 
 ## What am I learning?

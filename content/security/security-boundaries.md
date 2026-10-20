@@ -9,7 +9,7 @@ tags: [security, authentication, authorization, tenant, permissions, secrets]
 status: proposed-design
 lastReviewed: "2026-10-12"
 sources: [reference_sources/MOONLIGHT_ENGINEERING_HANDBOOK_BUILD_PLAN.original.md]
-related: [system-overview, tenant-isolation, services-and-selectors]
+related: [system-overview, tenant-isolation, services-and-selectors, observability-and-security-monitoring]
 ---
 
 ## Learn the references first
