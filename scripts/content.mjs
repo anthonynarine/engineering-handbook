@@ -9,7 +9,7 @@ const articles=files.map(file=>{
  if(!match) throw Error(`${file}: missing frontmatter`);
  const data=parse(match[1]); const content=match[2];
  for(const field of ['title','slug','section','summary','order','tags','status','lastReviewed','sources','related']) if(data[field]===undefined) throw Error(`${file}: missing ${field}`);
- if(!['foundry','system','django','react','security','deployment','operations','projects','ai','walkthrough'].includes(data.section))throw Error(`${file}: unknown section ${data.section}`);
+ if(!['foundry','system','django','react','security','observability','deployment','operations','projects','ai','walkthrough'].includes(data.section))throw Error(`${file}: unknown section ${data.section}`);
  if(!['title','summary'].every(key=>typeof data[key]==='string'&&data[key].trim()))throw Error(`${file}: missing readable title or summary`);
  if(!/^[a-z0-9-]+$/.test(data.slug)) throw Error(`${file}: invalid slug`);
  if(!['established-pattern','proposed-design','verified-implementation'].includes(data.status)) throw Error(`${file}: invalid status`);

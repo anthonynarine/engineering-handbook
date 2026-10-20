@@ -1,9 +1,9 @@
-<!-- content/operations/troubleshoot-background-jobs.md — Symptom-led investigation and verification guidance. -->
+<!-- content/observability/troubleshoot-background-jobs.md — Symptom-led investigation and verification guidance. -->
 ---
 title: "Troubleshoot: a job is missing, late or duplicated"
 slug: "troubleshoot-background-jobs"
 summary: "Separate scheduler invocation, delivery attempts and durable business outcomes."
-section: "operations"
+section: observability
 order: 84
 tags: ["troubleshooting", "diagnosis", "failure", "verification"]
 status: "established-pattern"

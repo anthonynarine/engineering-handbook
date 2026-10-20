@@ -1,8 +1,8 @@
-<!-- content/operations/backup-and-scheduled-tasks.md — Explain automated backups, restore evidence, and reliable scheduling. -->
+<!-- content/observability/backup-and-scheduled-tasks.md — Explain automated backups, restore evidence, and reliable scheduling. -->
 ---
 title: "Automatic backups and scheduled tasks"
 slug: backup-and-scheduled-tasks
-section: operations
+section: observability
 summary: "Separate backup capture from proven recovery, and scheduled triggers from reliable job completion."
 order: 9
 tags: [backup, restore, scheduled tasks, scheduler, heroku, recovery, cron]

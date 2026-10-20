@@ -1,9 +1,9 @@
-<!-- content/operations/operational-runbooks.md — Practical reference and clearly scoped verification guidance. -->
+<!-- content/observability/operational-runbooks.md — Practical reference and clearly scoped verification guidance. -->
 ---
 title: "Operational runbooks: respond, recover, verify"
 slug: "operational-runbooks"
 summary: "Use defined response paths for deploy failures, identity outages, credentials and data restoration."
-section: "operations"
+section: observability
 order: 89
 tags: ["reference", "contracts", "delivery", "manual"]
 status: "established-pattern"

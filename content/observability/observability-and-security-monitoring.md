@@ -1,8 +1,8 @@
-<!-- content/security/observability-and-security-monitoring.md — Separate operational observability from security monitoring and assign each alert an owner. -->
+<!-- content/observability/observability-and-security-monitoring.md — Separate operational observability from security monitoring and assign each alert an owner. -->
 ---
 title: "Observability and security monitoring: ownership, evidence, and alerts"
 slug: observability-and-security-monitoring
-section: security
+section: observability
 summary: "Decide what the application watches, what the security system evaluates, and who answers each alert."
 order: 8
 tags: [observability, monitoring, logging, metrics, tracing, alerts, security, opentelemetry, owasp, nist, gait, moneta]

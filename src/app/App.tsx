@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import MarkdownContent from '../shared/MarkdownContent';
 import MiniSearch from 'minisearch';
-import { ArrowRight, ArrowUpRight, BookOpen, ChevronRight, Server, Monitor, ShieldCheck, Workflow, Cloud, Activity, Layers, Menu, Moon, Search, Sun, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BookOpen, ChevronRight, Server, Monitor, ShieldCheck, Workflow, Cloud, Activity, Layers, Radar, Menu, Moon, Search, Sun, X } from 'lucide-react';
 import CaseStudy from '../features/projects/CaseStudy';
 import SectionNavigation from '../features/handbook/SectionNavigation';
 import GuideDirectory, { FindYourWay, readingPath } from '../features/handbook/GuideDirectory';
@@ -22,7 +22,7 @@ import ReportsLab, { ReportsPath } from '../features/reports-lab/ReportsLab';
 import { articles } from '../features/handbook';
 const search = new MiniSearch({fields:['title','summary','body','tags'],storeFields:['title','summary','slug','section'],searchOptions:{boost:{title:5,summary:2},prefix:true,fuzzy:0.2}});
 search.addAll(articles.map(a=>({...a,id:a.slug,tags:a.tags.join(' ')})));
-const sections = navigationSections.map(section=>({...section,icon:section.id==='start'?Layers:section.id==='server'?Server:section.id==='client'?Monitor:section.id==='foundry'?Workflow:section.id==='security'?ShieldCheck:section.id==='operations'?Cloud:section.id==='ai'?Activity:BookOpen}));
+const sections = navigationSections.map(section=>({...section,icon:section.id==='start'?Layers:section.id==='server'?Server:section.id==='client'?Monitor:section.id==='foundry'?Workflow:section.id==='security'?ShieldCheck:section.id==='observability'?Radar:section.id==='operations'?Cloud:section.id==='ai'?Activity:BookOpen}));
 function SearchDialog({close}:{close:()=>void}){
  const dialog=useRef<HTMLDialogElement>(null);const [query,setQuery]=useState('');const [selected,setSelected]=useState(0);
  const ranked=query.trim()?search.search(query):articles.map(a=>({...a,id:a.slug}));

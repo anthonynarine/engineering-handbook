@@ -3,7 +3,8 @@ import type { Article } from './index';
 export const navigationSections = [
  {id:'start',name:'Start here'}, {id:'foundry',name:'Foundry'},
  {id:'server',name:'Backend'}, {id:'client',name:'Frontend'},
- {id:'security',name:'Security'}, {id:'ai',name:'AI'},
+ {id:'security',name:'Security'}, {id:'observability',name:'Observability'},
+ {id:'ai',name:'AI'},
  {id:'operations',name:'Cloud & CI/CD'}, {id:'projects',name:'Projects'},
 ];
 export function navigationSection(article:Pick<Article,'slug'|'section'>):string {
@@ -11,7 +12,6 @@ export function navigationSection(article:Pick<Article,'slug'|'section'>):string
  if(['recipe-add-endpoint','recipe-scheduled-task'].includes(article.slug))return 'server';
  if(['recipe-live-events','recipe-query-mutation'].includes(article.slug))return 'client';
  if(['recipe-protect-screen','recipe-private-document'].includes(article.slug))return 'security';
- if(article.slug==='troubleshoot-background-jobs')return 'server';
  if(article.slug==='django-cors')return 'security';
  if(article.slug==='reliable-job-lifecycle')return 'server';
  return ({system:'start',walkthrough:'start',django:'server',react:'client',deployment:'operations'} as Record<string,string>)[article.section]??article.section;
@@ -36,13 +36,15 @@ export function navigationGroups(section:string,guides:Pick<Article,'slug'>[]) {
   {name:'Learn the concepts',slugs:['mcp-fundamentals']},
  ]:section==='security'?[
   {name:'Learn the standards',slugs:['security-standards-fundamentals','nist-fundamentals','owasp-fundamentals']},
-  {name:'Monitoring & alerts',slugs:['observability-and-security-monitoring']},
  ]:section==='operations'?[
   {name:'Learn the concepts',slugs:['ci-cd-fundamentals']},
   {name:'Hosting & cloud design',slugs:['deployment-platforms']},
   {name:'CI/CD & releases',slugs:['ci-cd-release-workflow']},
   {name:'Heroku field guide',slugs:['heroku-django-deployment','heroku-operations']},
-  {name:'Backups & recovery',slugs:['backup-and-scheduled-tasks','operational-runbooks','recovery-runbook']},
+ ]:section==='observability'?[
+  {name:'Monitoring & alerts',slugs:['observability-and-security-monitoring']},
+  {name:'Incident response',slugs:['operational-runbooks','recovery-runbook']},
+  {name:'Jobs & backups',slugs:['backup-and-scheduled-tasks']},
  ]:[];
  if(['server','client','security'].includes(section))groups.push({name:'Build recipes',slugs:matching('recipe-')});
  groups.push({name:'Troubleshooting',slugs:matching('troubleshoot-')});

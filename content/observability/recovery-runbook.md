@@ -1,8 +1,8 @@
-<!-- content/operations/recovery-runbook.md — Teach proposed incident exercises and evidence boundaries. -->
+<!-- content/observability/recovery-runbook.md — Teach proposed incident exercises and evidence boundaries. -->
 ---
 title: "Recovery drill: database, files, and measured downtime"
 slug: recovery-runbook
-section: operations
+section: observability
 summary: "Prove an application can recover by restoring in isolation and checking its complete data boundary."
 order: 27
 tags: [drills, resilience, security, operations, ai, foundry]
