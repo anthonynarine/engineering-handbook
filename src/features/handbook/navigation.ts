@@ -6,7 +6,7 @@ export const navigationSections = [
  {id:'security',name:'Security'}, {id:'observability',name:'Observability'},
  {id:'ai',name:'AI'},
  {id:'operations',name:'Cloud & CI/CD'}, {id:'projects',name:'Projects'},
- {id:'skills',name:'Skills needed'},
+ {id:'skills',name:'Skills needed'}, {id:'finance',name:'Financial libraries'},
 ];
 export function navigationSection(article:Pick<Article,'slug'|'section'>):string {
  if(['full-stack-folder-structure','frontend-folder-structure'].includes(article.slug))return 'start';
@@ -42,6 +42,10 @@ export function navigationGroups(section:string,guides:Pick<Article,'slug'>[]) {
   {name:'Hosting & cloud design',slugs:['deployment-platforms']},
   {name:'CI/CD & releases',slugs:['ci-cd-release-workflow']},
   {name:'Heroku field guide',slugs:['heroku-django-deployment','heroku-operations']},
+ ]:section==='finance'?[
+  {name:'Start here',slugs:['financial-libraries']},
+  {name:'Plaid',slugs:['plaid-fundamentals','plaid-transaction-sync','plaid-security-and-failures']},
+  {name:'Stripe',slugs:['stripe-fundamentals','stripe-webhooks-and-subscriptions']},
  ]:section==='skills'?[
   {name:'Start with the map',slugs:['skills-gap-map']},
   {name:'Infrastructure',slugs:['containers-fundamentals','networking-and-load-balancers','infrastructure-as-code']},

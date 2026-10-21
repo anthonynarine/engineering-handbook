@@ -12,7 +12,7 @@ try{
  const sidebar=page.locator('.sidebar');
  assert.equal(await sidebar.locator('button[aria-label="Backend"] svg.lucide-server').count(),1);
  assert.equal(await sidebar.locator('button[aria-label="Frontend"] svg.lucide-monitor').count(),1);
- assert.deepEqual(await sidebar.locator('.sidebar-section-title').allTextContents(),['Start here','Foundry','Backend','Frontend','Security','Observability','AI','Cloud & CI/CD','Projects','Skills needed']);
+ assert.deepEqual(await sidebar.locator('.sidebar-section-title').allTextContents(),['Start here','Foundry','Backend','Frontend','Security','Observability','AI','Cloud & CI/CD','Projects','Skills needed','Financial libraries']);
  const guideHrefs=await sidebar.locator('a[href^="/guide/"]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
  const projectSlugs=new Set(articles.filter(article=>article.section==='projects').map(article=>article.slug));
  for(const article of articles.filter(article=>!projectSlugs.has(article.slug)))assert.equal(guideHrefs.filter(href=>href==='/guide/'+article.slug).length,1,article.slug+' has one sidebar home');

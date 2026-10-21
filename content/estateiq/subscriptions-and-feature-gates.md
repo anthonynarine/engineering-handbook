@@ -9,7 +9,7 @@ tags: [estateiq, estateiq, architecture, implementation]
 status: established-pattern
 lastReviewed: "2026-10-12"
 sources: [reference_sources/estateiq-inspection.md]
-related: [estateiq-domain-map, deterministic-ai, backup-and-scheduled-tasks]
+related: [estateiq-domain-map, deterministic-ai, backup-and-scheduled-tasks, stripe-webhooks-and-subscriptions]
 ---
 
 ## Two different meanings of billing

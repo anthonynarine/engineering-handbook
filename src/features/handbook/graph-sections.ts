@@ -1,4 +1,4 @@
-import {Layers,Workflow,Server,Monitor,ShieldCheck,Sparkles,Cloud,FolderKanban,Radar,GraduationCap,type LucideIcon} from 'lucide-react';
+import {Layers,Workflow,Server,Monitor,ShieldCheck,Sparkles,Cloud,FolderKanban,Radar,GraduationCap,Landmark,type LucideIcon} from 'lucide-react';
 // The same symbol identifies a section and every guide belonging to it.
 export const graphSections:Record<string,{icon:LucideIcon;color:string;core:string}>={
  start:{icon:Layers,color:'#a1a1aa',core:'build-manual'},
@@ -11,5 +11,6 @@ export const graphSections:Record<string,{icon:LucideIcon;color:string;core:stri
  operations:{icon:Cloud,color:'#fbbf24',core:'ci-cd-release-workflow'},
  projects:{icon:FolderKanban,color:'#fb923c',core:'lumen-platform-design'},
  skills:{icon:GraduationCap,color:'#a3e635',core:'skills-gap-map'},
+ finance:{icon:Landmark,color:'#2dd4bf',core:'financial-libraries'},
 };
 export const sectionCenter=(section:string)=>{const index=Object.keys(graphSections).indexOf(section);const angle=index*2*Math.PI/Object.keys(graphSections).length-Math.PI/2;return {x:500+Math.cos(angle)*175,y:370+Math.sin(angle)*175};};
