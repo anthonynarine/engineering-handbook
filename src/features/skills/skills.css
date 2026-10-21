@@ -1,0 +1,7 @@
+/* src/features/skills/skills.css — Style the Skills course path and lesson overview card. */
+@media(max-width:540px){.skills-path ol{grid-template-columns:1fr}}
+.lesson-card{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);border-radius:16px;padding:22px 24px;margin:0 0 30px}
+.lesson-facts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.lesson-facts span{border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:11px;letter-spacing:.3px;color:var(--muted);background:var(--bg)}.lesson-facts span:first-child{color:var(--accent);border-color:var(--accent)}
+.lesson-card h2{font-size:15px!important;letter-spacing:0!important;margin:0 0 10px!important}
+.lesson-objectives{margin:0 0 4px;padding-left:20px}.lesson-objectives li{font-size:14px;line-height:1.7;margin:3px 0}
+.lesson-prerequisites{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;margin:14px 0 0!important;padding-top:14px;border-top:1px solid var(--line);font-size:13px!important}.lesson-prerequisites strong{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}.lesson-prerequisites a{color:var(--accent)}

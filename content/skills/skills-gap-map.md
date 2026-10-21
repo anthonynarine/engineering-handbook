@@ -35,6 +35,21 @@ That gap stays hidden on Heroku and Netlify, because the platform handles it. It
 
 The order follows dependency. Containers come first because load balancers route to them, IaC provisions them, and supply-chain checks scan them. Database performance comes before caching because a cache that hides a slow query only postpones the problem.
 
+## How each lesson works
+
+Every lesson follows the same structure, so I always know where I am:
+
+| Part | What it gives me |
+| --- | --- |
+| Lesson card | Level, time, prerequisites, and what I'll be able to do afterward |
+| Core concepts | The vocabulary, in one table |
+| Modern patterns | Current practice: the problem each pattern solves and when to use it |
+| Anti-patterns | Common mistakes and why they hurt |
+| Build it step by step | A worked example on my own stack, with a checkpoint |
+| Exercise | A task on a real project, with a clear "done means" |
+| Check your understanding | Questions to answer before reading the answer key |
+| Go deeper | Official documentation for the next level |
+
 ## How to use this section
 
 1. Read one lesson and answer its self-check without looking.

@@ -16,10 +16,11 @@ const articles=files.map(file=>{
  if(!/^\d{4}-\d{2}-\d{2}$/.test(data.lastReviewed) || Number.isNaN(Date.parse(data.lastReviewed))) throw Error(`${file}: invalid review date`);
  if(!Number.isFinite(data.order)||!['tags','sources','related'].every(k=>Array.isArray(data[k])&&data[k].every(v=>typeof v==='string'))) throw Error(`${file}: invalid metadata types`);
  for(const source of data.sources) if(!fs.existsSync(source)) throw Error(`${file}: missing source ${source}`);
+ if(data.lesson!==undefined){const l=data.lesson;if(!['Foundation','Intermediate','Advanced'].includes(l?.level)||typeof l.duration!=='string'||!['prerequisites','objectives'].every(k=>Array.isArray(l[k])&&l[k].every(v=>typeof v==='string'))||!l.objectives.length)throw Error(`${file}: invalid lesson metadata`);}
  return {...data,body:content,file};
 }).sort((a,b)=>a.order-b.order);
 const slugs=new Set();
 for(const a of articles){if(slugs.has(a.slug))throw Error(`Duplicate slug ${a.slug}`);slugs.add(a.slug);}
-for(const a of articles){for(const related of a.related)if(!slugs.has(related))throw Error(`Broken related link ${related}`);for(const match of a.body.matchAll(/\]\(\/guide\/([^)#]+)(?:#[^)]*)?\)/g))if(!slugs.has(match[1]))throw Error(`Broken article link ${match[1]}`);}
+for(const a of articles){for(const related of a.related)if(!slugs.has(related))throw Error(`Broken related link ${related}`);for(const prerequisite of a.lesson?.prerequisites??[])if(!slugs.has(prerequisite))throw Error(`Broken prerequisite ${prerequisite}`);for(const match of a.body.matchAll(/\]\(\/guide\/([^)#]+)(?:#[^)]*)?\)/g))if(!slugs.has(match[1]))throw Error(`Broken article link ${match[1]}`);}
 fs.mkdirSync('src/generated',{recursive:true});fs.writeFileSync('src/generated/articles.json',JSON.stringify(articles,null,2)+'\n');
 console.log(`Validated ${articles.length} articles; generated navigation and search source.`);

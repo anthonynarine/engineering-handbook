@@ -3,68 +3,103 @@
 title: "Containers: images, Dockerfiles, and Compose"
 slug: containers-fundamentals
 section: skills
-summary: "Package a Django app the way most platforms run it, and know what a container does and does not isolate."
+summary: "Package a Django app the way modern platforms run it: small, non-root, built once and promoted unchanged."
 order: 2
-tags: [skills, containers, docker, dockerfile, compose, oci, images, concepts, education]
+tags: [skills, containers, docker, dockerfile, compose, oci, images, buildkit, sbom, concepts, education]
 status: established-pattern
 lastReviewed: "2026-10-20"
 sources: [reference_sources/skills-gap-review.md]
 related: [skills-gap-map, networking-and-load-balancers, deployment-platforms, heroku-django-deployment, lumen-aws-architecture]
+lesson:
+  level: Foundation
+  duration: 60 minutes
+  prerequisites: [deployment-platforms]
+  objectives:
+    - Explain the difference between an image, a container and a registry
+    - Write a multi-stage, non-root Dockerfile for a Django app
+    - Run Django and PostgreSQL together locally with Compose
+    - Build one image per commit and promote it unchanged from staging to production
 ---
 
 ## What am I learning?
 
-A **container image** is a packaged filesystem plus metadata: my code, the Python runtime, system libraries and the command to start. A **container** is a running process started from that image, with its own view of the filesystem, network and process list. Images follow the [Open Container Initiative](https://opencontainers.org/) format, so one image built with Docker can run on Heroku, AWS ECS, Kubernetes or a laptop.
+A **container image** is a packaged filesystem plus metadata: my code, the Python runtime, system libraries and the start command. A **container** is a running process started from that image, with its own view of the filesystem, network and process list. Images follow the [Open Container Initiative](https://opencontainers.org/) standard, so one image runs on Heroku, AWS ECS, Kubernetes or a laptop.
 
-The point is that I ship the environment, not just the code. "Works on my machine" becomes "works in this image," and the image is the thing that gets tested and deployed.
+The point: I ship the environment, not just the code. "Works on my machine" becomes "works in this image," and that exact image is what gets tested and deployed.
 
-## Image versus container
+## Core concepts
 
-| Concept | Analogy | Lifetime | Example |
+| Concept | What it is | Lifetime | Example |
 | --- | --- | --- | --- |
-| Dockerfile | Recipe | Lives in Git | `FROM python:3.12-slim` … |
-| Image | Built, immutable package | Stored in a registry, tagged by version | `moneta-api:2f3dec3` |
-| Container | A running instance | Starts and stops; disposable | One web process serving requests |
+| Dockerfile | The build recipe | Versioned in Git | `FROM python:3.12-slim` … |
+| Layer | One cached build step | Reused until its inputs change | The `pip install` step |
+| Image | The immutable built package | Stored in a registry, tagged | `moneta-api:2f3dec3` |
+| Registry | Where images are stored and pulled from | Long-lived | Docker Hub, Amazon ECR, Heroku |
+| Container | A running instance of an image | Disposable | One web process |
+| Volume | Storage that outlives a container | Managed separately | Local PostgreSQL data |
 
-A container's filesystem is temporary. Anything written inside it disappears when it is replaced. That's the same rule as a Heroku dyno: durable data goes in PostgreSQL or S3, never in the container.
+A container's own filesystem is temporary. Anything written inside it disappears when it's replaced, just like a Heroku dyno. Durable data goes in PostgreSQL or S3.
 
-## A Dockerfile for Django
+## Modern patterns
+
+| Pattern | Problem it solves | Use it when |
+| --- | --- | --- |
+| **Multi-stage builds** | Build tools bloat the runtime image and widen the attack surface | Always, for compiled dependencies or frontend builds |
+| **Slim or distroless base images** | Fewer packages mean fewer vulnerabilities to patch | Always prefer `-slim`; consider [distroless](https://github.com/GoogleContainerTools/distroless) once the app is stable |
+| **BuildKit cache mounts** | Reinstalling every dependency on each build is slow | Any build that downloads packages ([cache docs](https://docs.docker.com/build/cache/optimize/)) |
+| **Build secrets** | Secrets passed with `ARG` or `COPY` stay in image history | A private package index or token is needed during the build ([build secrets](https://docs.docker.com/build/building/secrets/)) |
+| **Non-root user** | A compromised app gets root inside the container | Always |
+| **Build once, deploy many** | Rebuilding per environment means production runs an untested image | Every pipeline: tag by commit SHA and promote the same digest |
+| **Config from the environment** | Environment-specific images drift apart | Always; the [Twelve-Factor App](https://12factor.net/config) pattern |
+| **SBOM and provenance attestations** | No record of what is inside an image or how it was built | Anything shipped to production ([attestations](https://docs.docker.com/build/metadata/attestations/)) |
+| **One process per container** | Mixed processes are hard to scale, restart and observe | Separate web, worker and scheduler containers from the same image |
+| **Dev containers** | Every laptop has a slightly different toolchain | Teams or multi-machine work ([containers.dev](https://containers.dev/)) |
+
+## Anti-patterns to avoid
+
+- **Deploying `:latest`.** It is a moving pointer, so I can't tell what is running or roll back to it. Deploy by commit SHA or digest.
+- **Secrets in the image.** A secret deleted in a later layer still exists in the earlier one.
+- **Running as root.** It turns an app bug into control of the container.
+- **One image per environment.** Staging tests a different artifact than production runs.
+- **State inside the container.** Uploads and sessions on local disk vanish on redeploy.
+- **Never rebuilding.** Base images receive security fixes only if I rebuild on them.
+
+## Build it step by step
+
+**Step 1: keep the build context clean.** Create `.dockerignore`:
+
+```text
+.git
+.env
+node_modules
+__pycache__
+*.sqlite3
+```
+
+**Step 2: write a multi-stage Dockerfile.**
 
 ```dockerfile
-# Build stage: install dependencies with build tools available
+# syntax=docker/dockerfile:1
 FROM python:3.12-slim AS build
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --prefix=/install -r requirements.txt
 
-# Runtime stage: only what the app needs to run
 FROM python:3.12-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY --from=build /install /usr/local
 COPY . .
-RUN useradd --create-home appuser
+RUN useradd --create-home --uid 10001 appuser
 USER appuser
 EXPOSE 8000
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
 ```
 
-What each choice does:
+Requirements are copied before the code because dependencies change rarely. That keeps the slow install layer cached when only code changes.
 
-- **Multi-stage build.** Build tools stay in the first stage, so the final image is smaller and has less to attack. See [multi-stage builds](https://docs.docker.com/build/building/multi-stage/).
-- **Copy requirements before code.** Each instruction is a cached layer. Code changes often and dependencies rarely, so this order keeps rebuilds fast.
-- **Non-root user.** If the app is compromised, the attacker is not root inside the container.
-- **A `.dockerignore` file.** Keep `.git`, `node_modules`, `.env` and local databases out of the image. A secret copied into a layer stays in the image history even if a later layer deletes it.
-- **Pin base images.** `python:3.12-slim` changes over time. Pin a version, rebuild on purpose, and scan the result.
-
-Docker's [build best practices](https://docs.docker.com/build/building/best-practices/) cover these in more depth.
-
-## Configuration and secrets
-
-Build one image and run it in every environment. Environment differences come from environment variables at runtime, not from different images. Never bake secrets into the image. Inject them at runtime from the platform's secret store: Heroku config vars, AWS Secrets Manager or Parameter Store.
-
-## Compose for local development
-
-[Docker Compose](https://docs.docker.com/compose/) runs several containers together from one file. That gives me Django, PostgreSQL and Redis locally, matching production versions:
+**Step 3: run the stack locally with Compose.** [Docker Compose](https://docs.docker.com/compose/) starts several containers from one file:
 
 ```yaml
 services:
@@ -72,44 +107,69 @@ services:
     build: .
     ports: ["8000:8000"]
     env_file: .env
-    depends_on: [db]
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: postgres:16
     environment:
       POSTGRES_PASSWORD: local-only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
     volumes: [pgdata:/var/lib/postgresql/data]
 volumes:
   pgdata:
 ```
 
-The named volume keeps database data across restarts. Compose is a local and test tool. Production orchestration comes from the platform.
+The health condition makes the API wait until PostgreSQL accepts connections, not just until its container starts.
+
+**Step 4: tag by commit and attach build metadata.**
+
+```text
+docker buildx build \
+  --tag registry.example.com/moneta-api:$(git rev-parse --short HEAD) \
+  --sbom=true --provenance=mode=max --push .
+```
+
+Checkpoint: `docker run --rm <image> whoami` prints `appuser`, and `docker history <image>` shows no secrets.
 
 ## Where containers run
 
 | Platform | How containers show up |
 | --- | --- |
-| Heroku | Dynos are containers. Buildpacks build the image for me, or I can push my own image through the [Container Registry](https://devcenter.heroku.com/articles/container-registry-and-runtime). |
-| AWS ECS / Fargate | I supply the image. ECS schedules containers; Fargate removes the servers I would otherwise manage. |
-| AWS EC2 | I install and run a container runtime myself, as one option for Lumen's service instances. |
+| Heroku | Dynos are containers. Buildpacks build the image, or I push my own through the [Container Registry](https://devcenter.heroku.com/articles/container-registry-and-runtime). |
+| AWS ECS on Fargate | I supply the image; AWS schedules containers without servers for me to manage. |
+| AWS EC2 | I run a container runtime myself, as one option for Lumen's service instances. |
 | Kubernetes | A full orchestrator. Powerful, and usually more than a small team needs. |
 
-## What a container does not do
-
-- It is not a security boundary as strong as a virtual machine. Containers share the host kernel.
-- It does not make the app stateless. That is a design choice I still have to make.
-- It does not patch itself. Base images need rebuilding when vulnerabilities are fixed.
+Containers share the host's kernel, so they are a weaker isolation boundary than virtual machines. Treat them as packaging, not as a security sandbox.
 
 ## Exercise
 
-Containerize one existing Django app. Write the Dockerfile above, add `.dockerignore`, and run it with Compose against PostgreSQL. Done means: `docker compose up` serves the health endpoint, the container runs as a non-root user, and `docker history` shows no secrets.
+Containerize one existing Django app.
+
+1. Add `.dockerignore` and the Dockerfile above, adjusted for the project.
+2. Add the Compose file and run `docker compose up`.
+3. Confirm the health endpoint responds and the container runs as `appuser`.
+4. Build with a commit-SHA tag and an SBOM.
+
+**Done means:** the app serves from Compose, runs as non-root, the image tag matches a commit, and `docker history` shows no secrets.
 
 ## Check your understanding
 
 - What is the difference between an image and a container?
 - Why copy `requirements.txt` before the rest of the code?
 - If a later Dockerfile step deletes a secret file, is the image safe?
+- Why promote one image from staging to production instead of rebuilding?
 - Where should uploaded files go when the app runs in a container?
 
 ## Answer key
 
-An image is the immutable package; a container is a running instance of it. Copying requirements first keeps the slow dependency-install layer cached when only code changes. No: the secret remains in the earlier layer and in the image history. Uploaded files go to durable storage such as S3, because the container's filesystem is discarded when it is replaced.
+An image is the immutable package; a container is a running instance of it. Copying requirements first keeps the slow dependency layer cached when only code changes. No: the secret remains in the earlier layer and the image history; use build secrets instead. Rebuilding can produce a different artifact, so production would run something staging never tested. Uploads go to durable storage such as S3, because the container's filesystem is discarded when it's replaced.
+
+## Go deeper
+
+- [Docker build best practices](https://docs.docker.com/build/building/best-practices/)
+- [Multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
+- [Open Container Initiative](https://opencontainers.org/)

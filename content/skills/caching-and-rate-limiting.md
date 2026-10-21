@@ -3,36 +3,81 @@
 title: "Caching and rate limiting: speed and protection without new bugs"
 slug: caching-and-rate-limiting
 section: skills
-summary: "Cache the right data with tenant-safe keys, and rate-limit without mistaking it for security."
+summary: "Cache the right data with tenant-safe keys, avoid stampedes, and rate-limit without mistaking it for security."
 order: 5
-tags: [skills, caching, redis, cache invalidation, http caching, rate limiting, throttling, tenant, concepts, education]
+tags: [skills, caching, redis, cache invalidation, http caching, stale-while-revalidate, rate limiting, throttling, tenant, concepts, education]
 status: established-pattern
 lastReviewed: "2026-10-20"
 sources: [reference_sources/skills-gap-review.md]
 related: [skills-gap-map, postgres-performance, tenant-isolation, frontend-state-contracts, networking-and-load-balancers]
+lesson:
+  level: Intermediate
+  duration: 60 minutes
+  prerequisites: [postgres-performance, tenant-isolation]
+  objectives:
+    - Choose the right cache layer for a piece of data
+    - Build tenant-safe cache keys with a clear invalidation rule
+    - Prevent cache stampedes when a popular entry expires
+    - Pick a rate-limiting algorithm and explain where throttling is not enough
 ---
 
 ## What am I learning?
 
-A cache stores a result so the next request doesn't recompute it. Rate limiting caps how often a client can do something. Both use fast shared storage, often Redis. Both can create serious bugs: a cache can serve stale or wrong data, including another tenant's, and a rate limit can block real users while giving a false sense of security.
+A cache stores a result so the next request doesn't recompute it. Rate limiting caps how often a client can do something. Both rely on fast shared storage, often Redis. Both can create serious bugs: a cache can serve stale or wrong data, including another tenant's, and a rate limit can block real users while giving a false sense of security.
 
-## Where caches live
+## Core concepts
 
 | Layer | What it caches | Controlled by |
 | --- | --- | --- |
 | Browser | Responses, per user | HTTP headers (`Cache-Control`, `ETag`) |
 | CDN | Public responses and static assets | HTTP headers and CDN rules |
-| React Query | Server data in the frontend | Query keys and stale times |
+| TanStack Query | Server data in React | Query keys and stale times |
 | Django cache | Computed values, fragments, sessions | Application code |
-| PostgreSQL | Pages in memory | The database itself |
+| PostgreSQL | Data pages in memory | The database itself |
 
-Start at the edge for static assets. Hashed asset files can be cached for a year because a new build gets new file names. Private API responses should be `Cache-Control: private` or `no-store`, so a shared cache never stores one user's data. MDN's [HTTP caching guide](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching) explains the headers.
+Three questions decide every cache: **what is the key** (everything the value depends on), **how stale may it be**, and **what happens when the cache is down**.
 
-## Cache-aside in Django
+## Modern patterns
 
-The common pattern: check the cache, fall back to the database, store the result.
+| Pattern | Problem it solves | How |
+| --- | --- | --- |
+| **Cache-aside** | Repeated expensive reads | Check the cache, fall back to the source, store the result |
+| **Stale-while-revalidate** | Users wait while an expired value is recomputed | Serve the stale value and refresh in the background: the HTTP [`stale-while-revalidate`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) directive, and TanStack Query's [default model](https://tanstack.com/query/latest/docs/framework/react/guides/caching) |
+| **Immutable hashed assets** | Users load outdated JavaScript, or caches can't be long | Fingerprinted file names cached for a year; new builds get new names |
+| **Scoped, versioned keys** | Cross-tenant leaks and stale shapes after a deploy | `household:{id}:summary:v2` |
+| **Invalidate on commit** | Deleting too early lets stale data back in | `transaction.on_commit(lambda: cache.delete(key))` |
+| **Stampede protection** | Hundreds of requests recompute the same expired entry at once | A short lock so one request recomputes, plus random TTL jitter |
+| **Token bucket or sliding window limits** | Fixed windows allow double bursts at the window edge | Count requests over a rolling window or refill tokens at a steady rate |
+| **Edge rate limiting** | Floods reach the app before any throttle runs | Limits at the CDN or load balancer, for example [AWS WAF rate-based rules](https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html) |
+| **Idempotency keys** | Retries repeat side effects | Store the result of a write under a client-sent key and replay it on retry |
+
+## Anti-patterns to avoid
+
+- **A key without tenant scope.** `"dashboard:summary"` serves one household's numbers to all of them. That is a [tenant isolation](/guide/tenant-isolation) bug.
+- **No expiry.** Every entry needs a TTL or an explicit invalidation path.
+- **Publicly caching private responses.** API responses for a user need `Cache-Control: private` or `no-store`.
+- **The cache as the source of truth.** It can be evicted at any time.
+- **Caching to hide a slow query.** Fix the [query](/guide/postgres-performance) first.
+- **Throttling as the only login protection.** It doesn't stop distributed attacks.
+- **Per-process caches in production.** Django's local-memory backend gives each process its own cache and its own throttle counters.
+
+## Build it step by step
+
+**Step 1: configure a shared cache.** Django has a built-in Redis backend since 4.0 ([cache framework](https://docs.djangoproject.com/en/5.2/topics/cache/)):
 
 ```python
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.environ["REDIS_URL"],
+    }
+}
+```
+
+**Step 2: cache-aside with a scoped key and jittered TTL.**
+
+```python
+import random
 from django.core.cache import cache
 
 def household_summary(household_id: int) -> dict:
@@ -40,27 +85,35 @@ def household_summary(household_id: int) -> dict:
     summary = cache.get(key)
     if summary is None:
         summary = compute_summary(household_id)
-        cache.set(key, summary, timeout=300)
+        cache.set(key, summary, timeout=300 + random.randint(0, 60))
     return summary
 ```
 
-Django's [cache framework](https://docs.djangoproject.com/en/5.2/topics/cache/) has a built-in Redis backend since Django 4.0. The local-memory backend is per process, so it is fine for development but inconsistent across several web processes.
+The jitter spreads expiry so many keys don't expire at the same moment.
 
-## The two hard parts
+**Step 3: invalidate after commit.**
 
-**Keys must carry the full scope.** If a value depends on the tenant, the user or their permissions, the key must include them. A key like `"summary"` would serve one household's numbers to every household. That is a [tenant isolation](/guide/tenant-isolation) bug, not just a caching bug. Add a version segment (`v1`) so changing the cached shape doesn't read old entries.
+```python
+def record_transaction(household, data):
+    with transaction.atomic():
+        create_transaction(household, data)
+        transaction.on_commit(
+            lambda: cache.delete(f"household:{household.id}:summary:v1")
+        )
+```
 
-**Invalidation needs a rule.** Choose one per cached value:
+**Step 4: protect a hot entry from a stampede.** Let only one request recompute:
 
-- **Expire by time.** Accept data up to N seconds old. Simple and predictable.
-- **Delete on write.** The code that changes the data deletes the key, after the transaction commits (`transaction.on_commit`).
-- **Version the key.** Store a version number and bump it on change.
+```python
+if summary is None and cache.add(f"{key}:lock", 1, timeout=30):
+    summary = compute_summary(household_id)
+    cache.set(key, summary, timeout=300)
+    cache.delete(f"{key}:lock")
+```
 
-If I can't state how stale a value may be, it shouldn't be cached yet. And measure first: a cache over an unindexed query hides a [database problem](/guide/postgres-performance) instead of fixing it.
+`cache.add` only succeeds if the lock key doesn't exist yet. Other requests serve a stale copy or wait briefly.
 
-## Rate limiting
-
-Rate limiting protects capacity and expensive operations: login attempts, AI calls, exports, outbound email. Django REST framework provides [throttles](https://www.django-rest-framework.org/api-guide/throttling/):
+**Step 5: throttle expensive endpoints.** Django REST framework provides [throttles](https://www.django-rest-framework.org/api-guide/throttling/):
 
 ```python
 REST_FRAMEWORK = {
@@ -69,25 +122,36 @@ REST_FRAMEWORK = {
 }
 ```
 
-`ScopedRateThrottle` gives specific views their own limits, such as `throttle_scope = "ai"`. Throttles store counters in the cache, so they need a shared cache like Redis to work across processes.
+Give a view its own limit with `ScopedRateThrottle` and `throttle_scope = "ai"`. DRF's documentation is explicit that throttling is not a security measure against brute force or denial of service. Real login protection combines edge limits, backoff or lockout, MFA and [security monitoring](/guide/observability-and-security-monitoring). Client IPs for limits must come from trusted [proxy headers](/guide/networking-and-load-balancers).
 
-Know the limits of this tool. DRF's documentation says throttling is not a security measure against brute force or denial of service. A determined attacker rotates IPs and accounts. Real protection layers several controls: rate limits at the edge or load balancer, account lockout or backoff on authentication, MFA, and monitoring that spots patterns across accounts (see [security monitoring](/guide/observability-and-security-monitoring)). Client IPs for limits must come from trusted [proxy headers](/guide/networking-and-load-balancers).
+**Step 6: choose failure modes.** A speed-only cache falls back to the database when Redis is down. A login throttle may fail closed. Decide and document which is which.
 
-## When the cache is down
-
-Decide the failure mode. For a cache that only speeds things up, fall back to the database and log it. For throttling, choose deliberately whether an outage fails open (allow requests) or closed (reject them). Login protection usually justifies failing closed. A dashboard cache never does.
+Checkpoint: a test proves two households never share a cached summary.
 
 ## Exercise
 
-In one app, cache a slow, read-heavy summary for 5 minutes with a key scoped to the tenant, and delete it on commit when the underlying data changes. Add a scoped throttle to its most expensive endpoint. Done means: a test proves two tenants never share a cached value, and a test proves the throttle returns 429 after the limit.
+In one app:
+
+1. Cache a slow, read-heavy summary with a tenant-scoped, versioned key and jittered TTL.
+2. Invalidate it on commit when the underlying data changes.
+3. Add a scoped throttle to the most expensive endpoint.
+4. Set `Cache-Control: private` on user-specific API responses.
+
+**Done means:** tests prove tenant separation, invalidation after a write, and a 429 response after the limit.
 
 ## Check your understanding
 
-- What is wrong with the cache key `"dashboard:summary"` in a multi-tenant app?
+- What is wrong with the key `"dashboard:summary"` in a multi-tenant app?
 - Why delete a cache key in `on_commit` instead of right after `save()`?
-- Why does the local-memory cache backend break throttling with three web processes?
+- What is a cache stampede, and what stops it?
+- Why does the local-memory backend break throttling with three web processes?
 - Is a DRF throttle enough to stop credential stuffing?
 
 ## Answer key
 
-It has no tenant scope, so every tenant would read the first tenant's cached summary. If the transaction rolls back, or another request reads before commit, the cache can be refilled with stale data; deleting after commit avoids both. Each process keeps its own counters, so a client gets three times the limit. No: attackers spread attempts across IPs and accounts, so it takes edge limits, lockout or backoff, MFA and pattern monitoring together.
+It has no tenant scope, so every tenant reads the first tenant's summary. If the transaction rolls back, or another request reads before commit, the cache refills with stale data. A stampede is many requests recomputing one expired entry at once; a short recompute lock and TTL jitter prevent it. Each process keeps its own counters, so clients get three times the limit. No: attacks spread across IPs and accounts, so it takes edge limits, backoff or lockout, MFA and pattern monitoring together.
+
+## Go deeper
+
+- [MDN: HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
+- [Redis documentation](https://redis.io/docs/latest/)
