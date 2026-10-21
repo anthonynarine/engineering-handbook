@@ -19,8 +19,8 @@ export function LessonCard({ article }: { article: Article }) {
  const prerequisites = lesson.prerequisites.map(slug => articles.find(item => item.slug === slug)!);
  return <section className="lesson-card" aria-label="Lesson overview">
   <div className="lesson-facts">{number > 0 && <span>Lesson {number} of {skillLessons.length}</span>}<span>{lesson.level}</span><span>About {lesson.duration}</span></div>
-  <h2>By the end, I can</h2>
+  <h2>By the end of this lesson, you can</h2>
   <ul className="lesson-objectives">{lesson.objectives.map(objective => <li key={objective}>{objective}</li>)}</ul>
-  {prerequisites.length > 0 && <p className="lesson-prerequisites"><strong>Before you start</strong>{prerequisites.map(item => <Link key={item.slug} to={`/guide/${item.slug}`}>{item.title}</Link>)}</p>}
+  {prerequisites.length > 0 && <p className="lesson-prerequisites"><strong>Helpful to read first</strong>{prerequisites.map(item => <Link key={item.slug} to={`/guide/${item.slug}`}>{item.title}</Link>)}</p>}
  </section>;
 }
