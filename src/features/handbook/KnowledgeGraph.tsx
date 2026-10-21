@@ -8,7 +8,7 @@ import {rotate,unrotate,spherePoint,defaultOrbit,type Vector3,type Orbit} from '
 import {graphLabels} from './graph-labels';
 import {graphNodes as nodes,nodeById,graphLinks as relations,neighbors,defaultForces,initialPositions,type GraphForces,neighborhood} from './graph-model';
 import './knowledge-graph.css';
-const starts:Record<string,string>={start:'build-manual',foundry:'foundry-repository',server:'django-toolkit',client:'frontend-architecture',security:'security-boundaries',observability:'observability-and-security-monitoring',ai:'deterministic-ai',operations:'ci-cd-release-workflow',projects:'lumen-platform-design'};
+const starts:Record<string,string>={start:'build-manual',foundry:'foundry-repository',server:'django-toolkit',client:'frontend-architecture',security:'security-boundaries',observability:'observability-and-security-monitoring',ai:'deterministic-ai',operations:'ci-cd-release-workflow',projects:'lumen-platform-design',skills:'skills-gap-map'};
 type Point={x:number;y:number};
 type View={zoom:number;x:number;y:number};
 const clamp=(value:number,min:number,max:number)=>Math.max(min,Math.min(max,value));

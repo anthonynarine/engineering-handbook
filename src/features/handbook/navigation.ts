@@ -6,6 +6,7 @@ export const navigationSections = [
  {id:'security',name:'Security'}, {id:'observability',name:'Observability'},
  {id:'ai',name:'AI'},
  {id:'operations',name:'Cloud & CI/CD'}, {id:'projects',name:'Projects'},
+ {id:'skills',name:'Skills needed'},
 ];
 export function navigationSection(article:Pick<Article,'slug'|'section'>):string {
  if(['full-stack-folder-structure','frontend-folder-structure'].includes(article.slug))return 'start';
@@ -41,6 +42,10 @@ export function navigationGroups(section:string,guides:Pick<Article,'slug'>[]) {
   {name:'Hosting & cloud design',slugs:['deployment-platforms']},
   {name:'CI/CD & releases',slugs:['ci-cd-release-workflow']},
   {name:'Heroku field guide',slugs:['heroku-django-deployment','heroku-operations']},
+ ]:section==='skills'?[
+  {name:'Start with the map',slugs:['skills-gap-map']},
+  {name:'Infrastructure',slugs:['containers-fundamentals','networking-and-load-balancers','infrastructure-as-code']},
+  {name:'Data & performance',slugs:['postgres-performance','caching-and-rate-limiting']},
  ]:section==='observability'?[
   {name:'Monitoring & alerts',slugs:['observability-and-security-monitoring']},
   {name:'Incident response',slugs:['operational-runbooks','recovery-runbook']},
